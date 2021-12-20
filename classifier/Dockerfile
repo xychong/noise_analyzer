@@ -16,7 +16,7 @@ RUN \
 RUN \
     apt-get update && apt-get install -y wget \
     python3-edgetpu \
-    apt-get install python3-tflite-runtime
+    apt-get install python3-tflite-runtime \
     imx-gpu-viv \
     weston-imx \
     libpulse0=12.2-4+deb10u1 libpulsedsp=12.2-4+deb10u1 \
