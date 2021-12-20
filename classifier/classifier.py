@@ -76,19 +76,19 @@ while True:
         # load audio file and extract features
         if path.exists(WAV_PATH + row[1]):
             predict_x = extract_features_only(WAV_PATH + row[1])
-            #interpreter.set_tensor(input_details[0]['index'], predict_x.astype(np.float32))
-            input_details = interpreter.get_input_details()[0] # for one input data
-            tensor_index = input_details['index'] # tensor index in the interpreter
-            input_tensor = interpreter.tensor(tensor_index)()[0]
-            input_tensor[:, :] = predict_x
+            interpreter.set_tensor(input_details[0]['index'])
+            #input_details = interpreter.get_input_details()[0] # for one input data
+            #tensor_index = input_details['index'] # tensor index in the interpreter
+            #input_tensor = interpreter.tensor(tensor_index)()[0]
+            #input_tensor[:, :] = predict_x
             start_time = datetime.now()
             interpreter.invoke()
             end_time = datetime.now()
             duration = str(end_time - start_time)
             print("Interpreter duration: ", duration)
-            #tflite_model_predictions = interpreter.get_tensor(output_details[0]['index'])
-            output_details = interpreter.get_output_details()[0] # for one output data
-            tflite_model_predictions = interpreter.get_tensor(output_details['index']) # obtains output tensor in numpy array
+            tflite_model_predictions = interpreter.get_tensor(output_details[0]['index'])
+            #output_details = interpreter.get_output_details()[0] # for one output data
+            #tflite_model_predictions = interpreter.get_tensor(output_details['index']) # obtains output tensor in numpy array
             #tflite_model_predictions = np.argmax(tflite_model_predictions) # obtain most probable output
             #print(tflite_model_predictions[0])
             # get the indices of the top 2 predictions, invert into descending order
