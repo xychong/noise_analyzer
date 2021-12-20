@@ -1,0 +1,220 @@
+<%- include("_header") -%>
+
+<!-- Upload Modal 1 -->
+<div id="id01" class="w3-modal">
+  <div class="w3-modal-content w3-card-4 w3-animate-top">
+    <header class="w3-container w3-theme-l1"> 
+      <span onclick="document.getElementById('id01').style.display='none'"
+        class="w3-button w3-display-topright">×</span>
+      <h4>Tag file for upload</h4>    
+    </header>
+  <form method="post" class="w3-container w3-card-4">
+    <div class="w3-section">
+      <label>Select Class: </label>
+      <select name="predictClass" id="predictClass">
+        <% for(let i = 0; i < labels.length; i++) { %>
+        <option value="<%= i %>"><%= labels[i] %></option>
+        <% } %>
+        
+      </select>
+      <input type="hidden" name="hidFormName" value="id01">
+      <input type="hidden" name="hidWavID1" value="0" id="hidWavID1">     
+    </div>  
+    <div class="w3-section">      
+      <input class="w3-input" type="text" name="txtDescription">
+      <label>Description</label>
+    </div>
+  <div class="w3-section">      
+    <input class="w3-input" type="text" name="txtNotes">
+    <label>Notes</label>
+  </div>
+
+  <div class="w3-row">
+  <div class="w3-half">
+    
+    <br><br>
+    <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Submit</button>
+    <br><br>
+  </div>
+
+  <div class="w3-half">
+  &nbsp;
+  </div>
+  </div>
+</form>
+</div>
+</div>
+
+<!-- Delete Modal -->
+<div id="id02" class="w3-modal">
+  <div class="w3-modal-content w3-card-4 w3-animate-top">
+    <header class="w3-container w3-theme-l1">
+      <span onclick="document.getElementById('id02').style.display='none'"
+        class="w3-button w3-display-topright">×</span>
+      <h4>Confirm delete audio file</h4>
+    </header>
+  <form method="post" class="w3-container w3-card-4">
+    <div class="w3-section">
+      <h3>Are you sure?</h3>
+    </div>
+
+  <div class="w3-row">
+  <div class="w3-half">
+    <input type="hidden" name="hidFormName" value="id02">
+    <input type="hidden" name="hidWavID2" value="0" id="hidWavID2">
+    <input type="hidden" name="hidWavFile" value="0" id="hidWavFile"> 
+   <br><br>
+    <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Delete</button>
+    <br><br>
+  </div>
+
+<div class="w3-half">
+  &nbsp;
+  </div>
+  </div>
+</form>
+</div>
+</div>
+
+<!-- Upload Modal 2-->
+<div id="id03" class="w3-modal">
+  <div class="w3-modal-content w3-card-4 w3-animate-top">
+    <header class="w3-container w3-theme-l1">
+      <span onclick="document.getElementById('id03').style.display='none'"
+        class="w3-button w3-display-topright">×</span>
+      <h4>Confirm upload files</h4>
+    </header>
+  <form method="post" onsubmit="return uploading()" class="w3-container w3-card-4">
+    <div class="w3-section">
+      <h3><span id="sp03">Are you sure you want to upload the <%= readyCount %> file(s) marked as ready?</span></h3>
+    </div>
+  <div class="w3-row">
+    
+  <div class="w3-half">
+    <img src="rotator.gif" id="img03" style="visibility:hidden;">
+    <input type="hidden" name="hidFormName" value="id03">
+    <input type="hidden" name="hidWavID2" value="0" id="hidWavID2">
+    <input type="hidden" name="hidWavFile" value="0" id="hidWavFile">
+   <br><br>
+    <button class="w3-button w3-blue w3-padding-large w3-large w3-margin-top" id="bt03">Upload</button>
+    <br><br>
+  </div>
+
+<div class="w3-half">
+  &nbsp;
+  </div>
+  </div>
+</form>
+</div>
+</div>
+
+<!-- Info Modal -->
+<div id="id04" class="w3-modal">
+  <div class="w3-modal-content w3-card-4 w3-animate-top">
+    <header class="w3-container w3-theme-l1">
+      <span onclick="document.getElementById('id04').style.display='none'"
+        class="w3-button w3-display-topright">×</span>
+      <h4>Audio Device</h4>
+    </header>
+    <div class="w3-container w3-card-4">
+      <div class="w3-section">
+        <object data="/public/audio_info.txt" width="85%"></object>
+      </div>
+      <div class="w3-row">
+        <div class="w3-half">
+          <br><br>
+          <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top" onclick="document.getElementById('id04').style.display='none'">Close</button>
+          <br><br>
+        </div>
+        <div class="w3-half">
+          &nbsp;
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- First Grid -->
+<div class="w3-row-padding w3-padding-64 w3-container">
+  <div class="w3-padding w3-white w3-display-container">
+    
+    <h1 id="topTitle">Sound Recordings (<%= model.length %>)</h1>
+    <%- frmErr == "NA" ? '' : frmErr %>
+    
+    <table width="100%"><tr><td>
+      Filter by:
+      <form id="filForm">
+        <input id="filter1" class="w3-radio" type="radio" onchange="formSubmit(this)" name="filter" value="filter1"<%if (fil == "filter1" || (!fil) ) {%> checked<% } %>>
+        <label>Not Uploaded</label> &nbsp;&nbsp;&nbsp;
+        <input id="filter2" class="w3-radio" type="radio" onchange="formSubmit(this)" name="filter" value="filter2"<%if (fil == "filter2") {%> checked<% } %>>
+        <label>Uploaded</label> &nbsp;&nbsp;
+        <input id="filter3" class="w3-radio" type="radio" onchange="formSubmit(this)" name="filter" value="filter3"<%if (fil == "filter3") {%> checked<% } %>>
+        <label>Deleted</label>
+        <input id="hidSrt" type="hidden" name="srtid" value="<%= srtid %>">
+      </form>
+    </td><td style="text-align:right;">
+      Files ready for upload: <%= readyCount %> <br />
+      <button id="btnUploadAll" 
+         <% if (readyCount == 0 || upload_enabled != 'OK') { %>
+           class="w3-button w3-blue w3-padding-large w3-small w3-margin-top w3-disabled" style="box-shadow: 0px 0px 0px #888888;"
+         <% } else { %> 
+           class="w3-button w3-blue w3-padding-large w3-small w3-margin-top" style="box-shadow: 1px 1px 1px #888888;"
+         <% } %>
+         onclick="modalShow('id03', 0, 0, 'none')">Upload</button>
+         <% if (upload_enabled != 'OK') { %>
+           <br><span style="font-size:75%;color:#993300">(<%= upload_enabled %>)</span>
+         <% } %>
+    </td></tr></table>
+
+    <br><br>
+
+        <table class="w3-table w3-striped w3-bordered" id="tblMain">
+        <thead>
+        <tr class="w3-theme"><th><a href="?srtid=1&filter=<%= fil %>">File Created</a></th><th><a href="?srtid=2&filter=<%= fil %>">Status</a></th><th><a href="?srtid=3&filter=<%= fil %>">Top Guess</a></th><th>2nd Guess</th><th>Play</th><th>Action</th></tr>
+        </thead>
+        <tbody id="tblBody">
+                <% for (const wav of model) { %>
+        <tr>
+                <td style="vertical-align: middle;"><div class="tooltip"><%= wav.timestamp_created %><span class="tooltiptext"><%= wav.filename %></span></div></td>
+                <td style="vertical-align: middle;"><%= wav.current_status %></td>
+                <td style="vertical-align: middle;"><%= wav.interpreter_class %>&nbsp;
+                    <% if (wav.interpreter_certainty) { %>
+                      <% if (wav.interpreter_certainty >= wav.threshold) { %>
+                        <span style="font-weight: bold;">
+                      <% } %> 
+                      (<%= wav.interpreter_certainty %>%)
+                      <% if (wav.interpreter_certainty >= wav.threshold) { %>
+                        </span>
+                      <% } %>
+                    <% } %>
+                    </td>
+                <td style="vertical-align: middle;"><%= wav.interpreter_class2 %>&nbsp;
+                    <% if (wav.interpreter_certainty2) { %>
+                      (<%= wav.interpreter_certainty2 %>%)
+                    <% } %>
+                    </td>
+                <td style="vertical-align: bottom;">
+                
+                <% if (wav.current_status != "deleted" && wav.current_status != "uploaded") { %>
+                  <audio controls><source src="/public/<%= wav.filename %>"></audio> &nbsp;
+                <% } %>
+                </td>
+                <td style="vertical-align: middle;">
+                <% if (wav.current_status != "deleted" && wav.current_status != "uploaded") { %>
+                  <a class="w3-button w3-circle w3-small w3-red" onclick="modalShow('id02',<%= wav.my_rowid %>, '<%= wav.interpreter_class_id %>', '<%= wav.filename %>')"><i class="fa fa-trash"></i></a> &nbsp;
+                <% } %>
+                <% if (wav.current_status == "evaluated") { %>
+                  <a class="w3-button w3-circle w3-small w3-blue" onclick="modalShow('id01',<%= wav.my_rowid %>, '<%= wav.interpreter_class_id %>', '<%= wav.filename %>')"><i class="fa fa-cloud-upload"></i></a>
+                <% } %>
+                </td>
+                </tr>
+              <% } %>  
+        </tbody>
+        </table>
+      
+    
+      
+  </div>
+</div>
+
+<%- include("_footer") -%>

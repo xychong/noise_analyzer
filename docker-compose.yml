@@ -1,0 +1,27 @@
+version: '2'
+volumes:
+    shared-data:
+services:
+  recorder:
+    restart: always
+    build: ./recorder
+    privileged: true
+    volumes:
+      - 'shared-data:/data/sound_app'
+  classifier:
+    restart: always
+    build: ./classifier
+    privileged: true
+    volumes:
+      - 'shared-data:/data/sound_app'
+    depends_on:
+      - recorder
+  webserver:
+    restart: always
+    build: ./webserver
+    volumes:
+      - 'shared-data:/data/sound_app'
+    depends_on:
+      - classifier
+    ports:
+      - 80:80
