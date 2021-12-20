@@ -1,5 +1,5 @@
-name: "Coral Audio Analysis"
-description: "Analyze sounds using AI on the edge and fleet intelligence."
+name: "Noise Analyzer"
+description: "Recognize sounds using AI on the Edge"
 type: "sw.application"
 assets:
   repository:

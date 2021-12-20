@@ -37,7 +37,7 @@ def extract_features_only(filename):
 # to the Edge TPU instead of the CPU
 
 try:
-    interpreter = tflite.Interpreter(model_path=MODEL_FILE)
+    interpreter = tflite.Interpreter(model_path=MODEL_FILE, experimental_delegates=[tflite.load_delegate('libedgetpu.so.1')])
 except ValueError:
     print("Interpreter error. Is Edge TPU plugged in?")
 input_details = interpreter.get_input_details()
