@@ -15,6 +15,7 @@ RUN \
 # Install Coral Dev samples and dependencies libedgetpu-dev removed, libedgetpu1-std now libedgetpu1-legacy-std
 RUN \
     apt-get update && apt-get install -y wget \
+    apt-get install libedgetpu1-std \
     python3-edgetpu \
     imx-gpu-viv \
     weston-imx \
