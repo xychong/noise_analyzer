@@ -15,8 +15,8 @@ RUN \
 # Install Coral Dev samples and dependencies libedgetpu-dev removed, libedgetpu1-std now libedgetpu1-legacy-std
 RUN \
     apt-get update && apt-get install -y wget \
-    apt-get install libedgetpu1-std \
     python3-edgetpu \
+    apt-get install python3-tflite-runtime
     imx-gpu-viv \
     weston-imx \
     libpulse0=12.2-4+deb10u1 libpulsedsp=12.2-4+deb10u1 \
@@ -29,6 +29,7 @@ RUN \
 # so uninstall it to revert to version 0.31.0 from the base image
 RUN \
     pip uninstall -y llvmlite
+
 
 WORKDIR /usr/src/app
 
