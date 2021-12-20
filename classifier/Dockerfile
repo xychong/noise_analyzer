@@ -36,7 +36,7 @@ RUN \
 
 ENV UDEV=1
 
-COPY labels.txt labels.txt
+COPY class_labels.txt class_labels.txt
 COPY *.tflite ./
 COPY *.py ./
 COPY start.sh start.sh

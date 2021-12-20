@@ -9,7 +9,7 @@ app.set("views", __dirname + "/views");
 
 let wav_path = env.WAV_PATH || "/data/sound_app/";
 let db_name = env.DB_PATH || "/data/sound_app/sound_app.db";
-var label_file = env.LABEL_FILE || "/data/sound_app/labels.txt";
+var label_file = env.LABEL_FILE || "/data/sound_app/class_labels.txt";
 var master_node = env.MASTER_NODE || "unknown";
 
 
