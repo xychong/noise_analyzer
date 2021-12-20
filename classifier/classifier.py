@@ -25,11 +25,18 @@ print("Loaded {0} labels for model.".format(len(sound_names)))
 
 # just extract the features
 def extract_features_only(filename):
-    X, sample_rate = librosa.load(filename, 44100)  
-    mel_spect = librosa.feature.melspectrogram(y=X, sr=sample_rate, n_fft = 2048, hop_length = 788, n_mels=224, fmin=20)
-    log_mel_spect = librosa.power_to_db(mel_spect, ref=np.max)
-    features = np.repeat(log_mel_spect[:,:, np.newaxis], 3, axis =2)
+    features = np.empty((0,193))
+    X, sample_rate = librosa.load(filename)
+    stft = np.abs(librosa.stft(X))
+    mfccs = np.mean(librosa.feature.mfcc(y=X, sr=sample_rate, n_mfcc=40).T,axis=0)
+    chroma = np.mean(librosa.feature.chroma_stft(S=stft, sr=sample_rate).T,axis=0)
+    mel = np.mean(librosa.feature.melspectrogram(X, sr=sample_rate).T,axis=0)
+    contrast = np.mean(librosa.feature.spectral_contrast(S=stft, sr=sample_rate).T,axis=0)
+    tonnetz = np.mean(librosa.feature.tonnetz(y=librosa.effects.harmonic(X), sr=sample_rate).T,axis=0)
+    ext_features = np.hstack([mfccs,chroma,mel,contrast,tonnetz])
+    features = np.vstack([features,ext_features])
     return features
+
 
 # Specify a TensorFlow Lite delegate for the Edge TPU.
 # Then, whenever the interpreter encounters a graph node
@@ -76,20 +83,13 @@ while True:
         # load audio file and extract features
         if path.exists(WAV_PATH + row[1]):
             predict_x = extract_features_only(WAV_PATH + row[1])
-            interpreter.set_tensor(input_details[0]['index'])
-            #input_details = interpreter.get_input_details()[0] # for one input data
-            #tensor_index = input_details['index'] # tensor index in the interpreter
-            #input_tensor = interpreter.tensor(tensor_index)()[0]
-            #input_tensor[:, :] = predict_x
+            interpreter.set_tensor(input_details[0]['index'], predict_x.astype(np.float32))
             start_time = datetime.now()
             interpreter.invoke()
             end_time = datetime.now()
             duration = str(end_time - start_time)
             print("Interpreter duration: ", duration)
             tflite_model_predictions = interpreter.get_tensor(output_details[0]['index'])
-            #output_details = interpreter.get_output_details()[0] # for one output data
-            #tflite_model_predictions = interpreter.get_tensor(output_details['index']) # obtains output tensor in numpy array
-            #tflite_model_predictions = np.argmax(tflite_model_predictions) # obtain most probable output
             #print(tflite_model_predictions[0])
             # get the indices of the top 2 predictions, invert into descending order
             ind = np.argpartition(tflite_model_predictions[0], -2)[-2:]
