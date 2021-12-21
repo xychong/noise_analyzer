@@ -1,23 +1,23 @@
 # AI Monitoring at the Edge for Smart Nation Deployment
 A project that aims to identify sources of noise pollution in schools using the Google Coral Development Board.
 
-The Google Coral Development Board (Coral Dev Board) comes with a built-in microphone that can be used to listen for noises above a certain intensity threshold. The noises are saved as WAV files before audio features (e.g Log-Mel Spectrogram) are extracted. A Tensorflow Lite model that runs on the Edge TPU takes in these audio features as inputs and outputs the predicted sound classes.
+The Google Coral Development Board (Coral Dev Board) comes with a built-in microphone that can be used to listen for noises above a certain intensity threshold. The noises are saved as WAV files before audio features (e.g Log-Mel Spectrogram) are extracted. A Tensorflow Lite model that runs on the Edge TPU takes in these audio features as input and outputs the predicted sound classes.
 
 # Files
 
 **sound_edgetpu.tflite** - Tensorflow model in the classifier folder trained on sounds belonging to either of the following 5 sound classes: ambience, footsteps, horn, music and shout. This model has been converted to Tensorflow Lite, quantized and compiled for the Edge TPU. The input and output tensors are uint8 to prevent any latencies caused by data format conversions. The entire model executes on the Edge TPU.
 
-**class_labels.txt** - Text file comprising of the 5 labels - ambience, footsteps, horn, music and shout.
+**class_labels.txt** - Text file comprising of 5 labels - ambience, footsteps, horn, music and shout.
 
 # Services
 
-**recorder** - continuously listens through the mic and records audio files in 4 second chunks if they are above a certain volume threshold.
+**recorder** - Continuously listens through the microphone and records audio files in 4 second chunks if they are above a certain volume threshold.
 
-**classifier** - looks for newly recorded wav files and anaylzes them using the model. If they are not a reasonable match, they are saved for later analysis and possible upload to the master training node.
+**classifier** - Searches for newly recorded WAV files and anaylzes them using the TFLite model. If they are not a reasonable match, they are saved for later analysis.
 
-**webserver** - Express webserver that runs on port 80 to provide a view into the sound app activity, listen to files and decide which ones to upload. 
+**webserver** - Express webserver that runs on port 80; allows users to view the classification results and listen to the recorded WAV files.
 
-To see the sounds that have been detected by the device, as well as the classification, browse to the device's IP (or public URL if enabled) to access the web UI. Links at the bottom of this UI provide device information as well as data export.
+Browse to the device's IP (or public URL if enabled) to access the web UI. Links at the bottom of this UI provide device information, data export and github repository.
 
 # Device Variables 
 Helps to customize the behavior of the application:
