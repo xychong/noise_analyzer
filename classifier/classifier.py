@@ -39,7 +39,7 @@ def extract_features_only(filename):
     mel_spect = librosa.feature.melspectrogram(y=X, sr=sample_rate, n_fft = 2048, hop_length = hop_len, n_mels=224, fmin=20)
     log_mel_spect = librosa.power_to_db(mel_spect, ref=np.max)
     features = np.repeat(log_mel_spect[:,:, np.newaxis], 3, axis =2)
-    print(features.shape)
+    #print(features.shape)
     return features
 
 
@@ -106,12 +106,13 @@ while True:
             #tflite_model_predictions = np.argmax(tflite_model_predictions) # obtain most probable output
             #print(tflite_model_predictions[0])
             # get the indices of the top 2 predictions, invert into descending order
-            ind = np.argpartition(tflite_model_predictions[0], -2)[-2:]
+            ind = np.argpartition(tflite_model_predictions[0], -2)[-2:] # obtain array containing top 2 predictions
+            print(ind)
             ind[np.argsort(tflite_model_predictions[0][ind])]
-            print("Sorted Predictions: {0}".format(tflite_model_predictions))
+            print(ind)
             ind = ind[::-1]
-            top_certainty = int(tflite_model_predictions[0,ind[0]] * 100)
-            second_certainty = int(tflite_model_predictions[0,ind[1]] * 100)
+            top_certainty = int(tflite_model_predictions[0,ind[0]]/256 * 100)
+            second_certainty = int(tflite_model_predictions[0,ind[1]]/256 * 100)
             print("Top guess: ", sound_names[ind[0]], " (",top_certainty,"%)")
             print("2nd guess: ", sound_names[ind[1]], " (",second_certainty,"%)")
 
