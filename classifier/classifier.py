@@ -102,13 +102,13 @@ while True:
             #tflite_model_predictions = interpreter.get_tensor(output_details[0]['index'])
             output_details = interpreter.get_output_details()[0] # for one output data
             tflite_model_predictions = interpreter.get_tensor(output_details['index']) # obtains output tensor in numpy array
-            print("Predictions: ".format(tflite_model_predictions))
+            print("Predictions: {0}".format(tflite_model_predictions))
             #tflite_model_predictions = np.argmax(tflite_model_predictions) # obtain most probable output
             #print(tflite_model_predictions[0])
             # get the indices of the top 2 predictions, invert into descending order
             ind = np.argpartition(tflite_model_predictions[0], -2)[-2:]
             ind[np.argsort(tflite_model_predictions[0][ind])]
-            print("Sorted Predictions: ".format(tflite_model_predictions))
+            print("Sorted Predictions: {0}".format(tflite_model_predictions))
             ind = ind[::-1]
             top_certainty = int(tflite_model_predictions[0,ind[0]] * 100)
             second_certainty = int(tflite_model_predictions[0,ind[1]] * 100)
