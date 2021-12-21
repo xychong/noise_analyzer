@@ -40,6 +40,7 @@ def extract_features_only(filename):
     mel_spect = librosa.feature.melspectrogram(y=X, sr=sample_rate, n_fft = 2048, hop_length = hop_len, n_mels=224, fmin=20)
     log_mel_spect = librosa.power_to_db(mel_spect, ref=np.max)
     features = np.repeat(log_mel_spect[:,:, np.newaxis], 3, axis =2)
+    print(features.shape)
     return features
 
 
