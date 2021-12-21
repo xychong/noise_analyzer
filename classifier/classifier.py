@@ -27,7 +27,7 @@ print("Loaded {0} labels for model.".format(len(sound_names)))
 def extract_features_only(filename):
     features = np.empty((224,224,3)) # MobileNetV2 input size
     X, sample_rate = librosa.load(filename, 44100)
-    mel_spect = librosa.feature.melspectrogram(y=X, sr=sample_rate, n_fft = 2048, hop_length = 788, n_mels=224, fmin=20)
+    mel_spect = librosa.feature.melspectrogram(y=X, sr=sample_rate, n_fft = 2048, hop_length = 697, n_mels=224, fmin=20)
     log_mel_spect = librosa.power_to_db(mel_spect, ref=np.max)
     features = np.repeat(log_mel_spect[:,:, np.newaxis], 3, axis =2)
     return features
