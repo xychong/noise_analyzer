@@ -29,7 +29,7 @@ def extract_features_only(filename):
     X, sample_rate = librosa.load(filename, 44100)
     #mel_spect = librosa.feature.melspectrogram(y=X, sr=sample_rate, n_fft = 2048, hop_length = 788, n_mels=224, fmin=20)
     duration = librosa.get_duration(X)/2
-    print("Duration: {0}".format((duration))
+    print("Duration: {0}".format((duration)))
     hop_len = round(44100/(224/duration))
     print("Hop Length: {0}".format(hop_len))
     mel_spect = librosa.feature.melspectrogram(y=X, sr=sample_rate, n_fft = 2048, hop_length = 650, n_mels=224, fmin=20)
