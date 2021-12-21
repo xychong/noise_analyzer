@@ -78,7 +78,7 @@ while True:
         # load audio file and extract features
         if path.exists(WAV_PATH + row[1]):
             predict_x = extract_features_only(WAV_PATH + row[1])
-            interpreter.set_tensor(input_details[0]['index'], predict_x)
+            interpreter.set_tensor(input_details[0]['index'], predict_x.astype(np.uint8))
             #input_details = interpreter.get_input_details()[0] # for one input data
             #tensor_index = input_details['index'] # tensor index in the interpreter
             #input_tensor = interpreter.tensor(tensor_index)()[0]
