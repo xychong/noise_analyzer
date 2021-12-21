@@ -37,9 +37,6 @@ def extract_features_only(filename):
     if num_features > 224:
         hop_len += 1
         print("New Hop Length: {0}".format(hop_len))
-    if num_features < 224:
-        hop_len -=1
-        print("New Hop Length: {0}".format(hop_len))
     mel_spect = librosa.feature.melspectrogram(y=X, sr=sample_rate, n_fft = 2048, hop_length = hop_len, n_mels=224, fmin=20)
     log_mel_spect = librosa.power_to_db(mel_spect, ref=np.max)
     features = np.repeat(log_mel_spect[:,:, np.newaxis], 3, axis =2)
