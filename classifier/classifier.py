@@ -27,16 +27,15 @@ print("Loaded {0} labels for model.".format(len(sound_names)))
 def extract_features_only(filename):
     features = np.empty((224,224,3)) # MobileNetV2 input size
     X, sample_rate = librosa.load(filename, 44100)
-    #mel_spect = librosa.feature.melspectrogram(y=X, sr=sample_rate, n_fft = 2048, hop_length = 788, n_mels=224, fmin=20)
-    duration = librosa.get_duration(X)/2
-    print("Duration: {0}".format((duration)))
+    duration = librosa.get_duration(X)/2 # Since 44100 is twice the default sampling rate of 22050
+    print("Duration of audio: {0}s".format((duration)))
     hop_len = round(44100/(224/duration))
-    print("Hop Length: {0}".format(hop_len))
+    #print("Hop Length: {0}".format(hop_len))
     num_features = (sample_rate/hop_len) * duration
-    print("Number of Features: {0}".format(num_features))
+    #print("Number of Features: {0}".format(num_features))
     if num_features >= 224:
-        hop_len += 1
-        print("New Hop Length: {0}".format(hop_len))
+        hop_len += 1 # Fix error due to rounding off
+        #print("New Hop Length: {0}".format(hop_len))
     mel_spect = librosa.feature.melspectrogram(y=X, sr=sample_rate, n_fft = 2048, hop_length = hop_len, n_mels=224, fmin=20)
     log_mel_spect = librosa.power_to_db(mel_spect, ref=np.max)
     features = np.repeat(log_mel_spect[:,:, np.newaxis], 3, axis =2)
@@ -103,11 +102,13 @@ while True:
             #tflite_model_predictions = interpreter.get_tensor(output_details[0]['index'])
             output_details = interpreter.get_output_details()[0] # for one output data
             tflite_model_predictions = interpreter.get_tensor(output_details['index']) # obtains output tensor in numpy array
+            print("Predictions: ".format(tflite_model_predictions))
             #tflite_model_predictions = np.argmax(tflite_model_predictions) # obtain most probable output
             #print(tflite_model_predictions[0])
             # get the indices of the top 2 predictions, invert into descending order
             ind = np.argpartition(tflite_model_predictions[0], -2)[-2:]
             ind[np.argsort(tflite_model_predictions[0][ind])]
+            print("Sorted Predictions: ".format(tflite_model_predictions))
             ind = ind[::-1]
             top_certainty = int(tflite_model_predictions[0,ind[0]] * 100)
             second_certainty = int(tflite_model_predictions[0,ind[1]] * 100)
