@@ -12,12 +12,12 @@ RUN \
     printf "deb [arch=arm64] https://packages.cloud.google.com/apt mendel-day main \n deb-src https://packages.cloud.google.com/apt mendel-day main" \
     | tee /etc/apt/sources.list.d/multistrap-main.list
 
-# Install Coral Dev samples and dependencies libedgetpu-dev removed, libedgetpu1-std now libedgetpu1-legacy-std
+# Install Coral Dev samples and dependencies 
 RUN \
     apt-get update && apt-get install -y wget \
     python3-pycoral \
     libedgetpu1-std \
-    python3-tflite-runtime \
+    #python3-tflite-runtime \
     imx-gpu-viv \
     weston-imx \
     libpulse0=12.2-4+deb10u1 libpulsedsp=12.2-4+deb10u1 \

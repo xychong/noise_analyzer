@@ -107,10 +107,8 @@ while True:
             #print(tflite_model_predictions[0])
             # get the indices of the top 2 predictions, invert into descending order
             ind = np.argpartition(tflite_model_predictions[0], -2)[-2:] # obtain array containing top 2 predictions
-            print(ind)
             ind[np.argsort(tflite_model_predictions[0][ind])]
-            print(ind)
-            ind = ind[::-1]
+            ind = ind[::-1] # reverses the index
             top_certainty = int(tflite_model_predictions[0,ind[0]]/256 * 100)
             second_certainty = int(tflite_model_predictions[0,ind[1]]/256 * 100)
             print("Top guess: ", sound_names[ind[0]], " (",top_certainty,"%)")
