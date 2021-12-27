@@ -72,17 +72,19 @@ def append_db(filename, max_intensity):
         time.sleep(5)
         
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = sqlite3.connect(DB_PATH) # creating a Connection object that represents the database
     except Error as e:
         print("Error connecting to database: ", e)
 
-    cur = conn.cursor()
+    cur = conn.cursor() # create a Cursor object
+    # Create table
     sql = """INSERT INTO 'wav_file'('filename', 'timestamp_created', 'current_status', 'threshold', 'avg_intensity')
         VALUES(?, ?, ?, ?, ?);"""
+    # Data being inserted
     data_tuple = (filename, time.strftime('%Y-%m-%d %H:%M:%S'), 'created', THRESHOLD, max_intensity)
     try:
         cur.execute(sql, data_tuple)
-        conn.commit()
+        conn.commit() # Save (commit) the changes
     except Exception as e:
         print("Error inserting into database: ", e)
 
@@ -122,6 +124,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
     n = num_phrases
     response = []
     file_split = 0
+
     while (num_phrases == -1 or n > 0):
         cur_data = stream.read(CHUNK, exception_on_overflow = False)
         slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4))))
@@ -178,7 +181,7 @@ def save_speech(data, p):
 
     filename = str(int(time.time()))
     # writes data to WAV file
-    data = b''.join(data)
+    data = b''.join(data) # perform join on a byte string since data is in bytes
     wf = wave.open(WAV_FILE_PATH + filename + '.wav', 'wb')
     wf.setnchannels(1)
     wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
@@ -187,5 +190,6 @@ def save_speech(data, p):
     wf.close()
     return filename + '.wav'
 
+# Interpreter inserts this at the top of the module when run as the main program
 if(__name__ == '__main__'):
     listen_for_speech()  # listen to mic.

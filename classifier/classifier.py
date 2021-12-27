@@ -63,12 +63,15 @@ interpreter.allocate_tensors()
 #print("type:", output_details[0]['dtype'])
 
 try:
-    conn = sqlite3.connect(DB_FILE)
+    conn = sqlite3.connect(DB_FILE) # create a Connection object
 except Error as e:
     print("Error connecting to database: ", e)
 
-conn.row_factory = sqlite3.Row
-cur = conn.cursor()
+# provide both index-based and case-insensitive 
+# name-based access to columns with almost no memory overhead
+conn.row_factory = sqlite3.Row 
+
+cur = conn.cursor() # create a Cursor object
 top_certainty = 0
 second_certainty = 0
 sleep_msg = 1
@@ -76,11 +79,11 @@ sleep_msg = 1
 while True:
     try:
         cur.execute("SELECT my_rowid, filename FROM wav_file WHERE current_status='created'")
-        recs = cur.fetchall()
+        recs = cur.fetchall() # fetches rows of a query result
     except Exception as e:
         print("[ERROR] %s".format(e))
     if len(recs) > 0:
-        print("Found {0} unevaluated file(s).".format(len(recs)))
+        print("Found {0} unevaluated file(s).".format(len(recs))) # number of rows of results
         sleep_msg = 1
     for row in recs:
         print("Evaluating file {0}{1} (id {2})".format(WAV_PATH, row[1], row[0]))
@@ -88,7 +91,7 @@ while True:
         # load audio file and extract features
         if path.exists(WAV_PATH + row[1]):
             predict_x = extract_features_only(WAV_PATH + row[1])
-            predict_x = np.expand_dims(predict_x, axis=0)
+            predict_x = np.expand_dims(predict_x, axis=0) # expand from 3D to 4D
             interpreter.set_tensor(input_details[0]['index'], predict_x.astype(np.uint8))
             #input_details = interpreter.get_input_details()[0] # for one input data
             #tensor_index = input_details['index'] # tensor index in the interpreter
@@ -106,9 +109,13 @@ while True:
             #tflite_model_predictions = np.argmax(tflite_model_predictions) # obtain most probable output
             #print(tflite_model_predictions[0])
             # get the indices of the top 2 predictions, invert into descending order
-            ind = np.argpartition(tflite_model_predictions[0], -2)[-2:] # obtain array containing top 2 predictions
+            ind = np.argpartition(tflite_model_predictions[0], -2)[-2:] # obtain array containing indices of top 2 predictions
+            print(ind)
+            top2_sorted_indices = np.argsort(tflite_model_predictions[0][ind])
+            print(top2_sorted_indices)
             ind[np.argsort(tflite_model_predictions[0][ind])]
             ind = ind[::-1] # reverses the index
+            print(ind)
             top_certainty = int(tflite_model_predictions[0,ind[0]]/256 * 100)
             second_certainty = int(tflite_model_predictions[0,ind[1]]/256 * 100)
             print("Top guess: ", sound_names[ind[0]], " (",top_certainty,"%)")

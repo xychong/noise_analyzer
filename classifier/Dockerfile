@@ -17,7 +17,6 @@ RUN \
     apt-get update && apt-get install -y wget \
     python3-pycoral \
     libedgetpu1-std \
-    #python3-tflite-runtime \
     imx-gpu-viv \
     weston-imx \
     libpulse0=12.2-4+deb10u1 libpulsedsp=12.2-4+deb10u1 \
