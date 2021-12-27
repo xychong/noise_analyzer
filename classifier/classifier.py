@@ -113,7 +113,7 @@ while True:
             print(ind)
             top2_sorted_indices = np.argsort(tflite_model_predictions[0][ind])
             print(top2_sorted_indices)
-            ind[np.argsort(tflite_model_predictions[0][ind])]
+            #ind[np.argsort(tflite_model_predictions[0][ind])]
             ind = ind[::-1] # reverses the index
             print(ind)
             top_certainty = int(tflite_model_predictions[0,ind[0]]/256 * 100)
