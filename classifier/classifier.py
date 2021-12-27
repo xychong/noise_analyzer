@@ -103,18 +103,16 @@ while True:
             duration = str(end_time - start_time)
             print("Interpreter duration: ", duration)
             #tflite_model_predictions = interpreter.get_tensor(output_details[0]['index'])
-            output_details = interpreter.get_output_details()[0] # for one output data
+            output_details = interpreter.get_output_details()[0]
             tflite_model_predictions = interpreter.get_tensor(output_details['index']) # obtains output tensor in numpy array
             print("Predictions: {0}".format(tflite_model_predictions))
             #tflite_model_predictions = np.argmax(tflite_model_predictions) # obtain most probable output
             #print(tflite_model_predictions[0])
-            # get the indices of the top 2 predictions, invert into descending order
             ind = np.argpartition(tflite_model_predictions[0], -2)[-2:] # obtain array containing indices of top 2 predictions
             #ind[np.argsort(tflite_model_predictions[0][ind])]
-            ind = ind[::-1] # reverses the index
-            print(ind)
-            top_certainty = int((tflite_model_predictions[0][ind[0]])/256 * 100)
-            second_certainty = int((tflite_model_predictions[0][ind[1]])/256 * 100)
+            ind = ind[::-1] # reverses the index (descending order)
+            top_certainty = int((tflite_model_predictions[0][ind[0]])/256 * 100) # calculate probability of top prediction
+            second_certainty = int((tflite_model_predictions[0][ind[1]])/256 * 100) # calculate probability of second prediction
             print("Top guess: ", sound_names[ind[0]], " (",top_certainty,"%)")
             print("2nd guess: ", sound_names[ind[1]], " (",second_certainty,"%)")
 
@@ -176,4 +174,4 @@ while True:
     if sleep_msg == 1:
         print("No unevaluated files left in the queue, waiting...")
         sleep_msg = 0
-    time.sleep(2)
+    time.sleep(2) # suspend execution for 2 seconds
