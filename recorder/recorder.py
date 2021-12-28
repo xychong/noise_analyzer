@@ -5,13 +5,17 @@ from collections import deque
 import os
 from os import path
 from pathlib import Path
-import time
+#import time
+from datetime import datetime
+import pytz
 import math
 import sqlite3
 
 # based on https://github.com/jeysonmc/python-google-speech-scripts/blob/master/stt_google.py
+# Values of environment variables can be adjusted on balenaCloud under "Device Variables"
 
-DB_PATH = os.getenv("DB_PATH", "/data/sound_app/sound_app.db")  # path and filename of database
+# explicitly specifying path and filename of database in shared volume and store the path in environment variable "DB_PATH"
+DB_PATH = os.getenv("DB_PATH", "/data/sound_app/sound_app.db")
 
 # FYI: Database schema below, only one table
 # CREATE TABLE wav_file(my_rowid INTEGER PRIMARY KEY, timestamp_created TEXT, timestamp_evaluated TEXT, timestamp_deleted TEXT, interpreter_class TEXT, interpreter_certainty INT,
@@ -20,24 +24,27 @@ DB_PATH = os.getenv("DB_PATH", "/data/sound_app/sound_app.db")  # path and filen
 #   user_class TEXT, timestamp_ready TEXT, remote_filename TEXT, upload_msg TEXT, certainty_threshold INT, t3 TEXT, t4 TEXT, n1 INT, n2 INT,
 #   interpreter_class_id INT, interpreter_class2_id INT, user_class_id INT);
 
-WAV_FILE_PATH = os.getenv("WAV_PATH", "/data/sound_app/") # path to location for saving wav files
+# explicitly specifying path to location for saving WAV files in shared volume and store the path in environment variable "WAV_PATH"
+WAV_FILE_PATH = os.getenv("WAV_PATH", "/data/sound_app/") 
 
-wf = os.getenv("WAV_FILE_LIMIT", "6000000000") # Total size limit in bytes of stored wav files before warning
+# explicitly specifying total size limit in bytes of stored WAV files before warning and store the value in environment variable "WAV_FILE_LIMIT"
+wf = os.getenv("WAV_FILE_LIMIT", "6000000000") 
 if wf.isnumeric():
     WAV_FILE_LIMIT = int(wf)
 else:
     WAV_FILE_LIMIT = 6000000000
 
-UUID = os.environ.get('RESIN_DEVICE_UUID')[:7] # First seven chars of device UUID
+# obtain first seven chars of device UUID
+UUID = os.environ.get('RESIN_DEVICE_UUID')[:7] 
 
 # Microphone stream config.
 CHUNK = 1024  # CHUNKS of bytes to read each time from mic
-FORMAT = pyaudio.paInt16
+FORMAT = pyaudio.paInt16 # signed 16-bit binary string to store sound data
 CHANNELS = 1
-RATE = 44100
+RATE = 44100 # sampling rate
 th = os.getenv("WAV_REC_THRESHOLD", "2000")  # The threshold intensity that defines silence
-                  # and noise signal (an int. lower than THRESHOLD is silence).
-                  # based on peak ampltude in each chunk of audio data
+                                             # and noise signal (an int. lower than THRESHOLD is silence).
+                                             # based on peak ampltude in each chunk of audio data
 if th.isnumeric():
     THRESHOLD = int(th)
 else:
@@ -52,7 +59,8 @@ PREV_AUDIO = 0.5  # Previous audio (in seconds) to prepend. When noise
                   # prepended. This helps to prevent chopping the beggining
                   # of the sound.
 
-idx = os.getenv("INPUT_INDEX", "x")  # Which physical input to record from
+# explicitly specifying which physical input to record from and store the result in environment variable "INPUT_INDEX"
+idx = os.getenv("INPUT_INDEX", "x")  
 if idx.isnumeric():
     INPUT_INDEX = int(idx)
 else:
@@ -62,6 +70,7 @@ MAX_FILE_LENGTH = 4 # Number of seconds until a new file is started while reordi
 
 file_count = 0 # counter for how many files created in this session.
 
+# get WAV file of recorded audio and write into database
 def append_db(filename, max_intensity):
     """
     Writes record to database for new sound file recording
@@ -81,7 +90,7 @@ def append_db(filename, max_intensity):
     sql = """INSERT INTO 'wav_file'('filename', 'timestamp_created', 'current_status', 'threshold', 'avg_intensity')
         VALUES(?, ?, ?, ?, ?);"""
     # Data being inserted
-    data_tuple = (filename, time.strftime('%Y-%m-%d %H:%M:%S'), 'created', THRESHOLD, max_intensity)
+    data_tuple = (filename, datetime.now(pytz.timezone('Asia/Singapore')), 'created', THRESHOLD, max_intensity)
     try:
         cur.execute(sql, data_tuple)
         conn.commit() # Save (commit) the changes
@@ -181,7 +190,7 @@ def save_speech(data, p):
 
     filename = str(int(time.time()))
     # writes data to WAV file
-    data = ''.join(data) # perform join on a byte string since data is in bytes
+    data = b''.join(data) # perform join on a byte string since data is in bytes
     wf = wave.open(WAV_FILE_PATH + filename + '.wav', 'wb')
     wf.setnchannels(1)
     wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))

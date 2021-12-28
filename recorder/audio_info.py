@@ -1,10 +1,14 @@
 import pyaudio
+import pytz
 import json
 from datetime import datetime
 
+# instantiate PyAudio
 audio = pyaudio.PyAudio()
 
-outp ="Audio Information as of {0}\n\n".format(datetime.now())
+outp ="Audio Information as of {0}\n\n".format(datetime.now(pytz.timezone('Asia/Singapore')))
+
+# obtain list of device index and name of devices
 outp = outp + "----------------------record device list---------------------\n"
 info = audio.get_host_api_info_by_index(0)
 numdevices = info.get('deviceCount')
@@ -18,9 +22,12 @@ outp = outp + "   \n"
 
 outp = outp + "------------------default input device --------------------- \n"
 info = audio.get_default_input_device_info()
+# convert python object into a json string
+# ". " is the item separator
+# " = " is the key separator
 outp = outp + json.dumps(info, indent=4, separators=(". ", " = ")) + "\n"
 
 print(outp)
-file1 = open("/data/sound_app/audio_info.txt", "w")
-file1.writelines(outp)
-file1.close()
+audio_info_file = open("/data/sound_app/audio_info.txt", "w")
+audio_info_file.writelines(outp)
+audio_info_file.close()

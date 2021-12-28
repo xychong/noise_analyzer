@@ -30,7 +30,7 @@ RUN \
 RUN \
     pip uninstall -y llvmlite
 
-
+# creates and sets the working directory
 WORKDIR /usr/src/app
 
 RUN \
@@ -38,9 +38,11 @@ RUN \
 
 ENV UDEV=1
 
+# copy files into working directory
 COPY class_labels.txt class_labels.txt
 COPY *.tflite ./
 COPY *.py ./
 COPY start.sh start.sh
 
+# launch the .sh script
 CMD ["bash","start.sh"]

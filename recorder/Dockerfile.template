@@ -23,17 +23,24 @@ RUN \
     alsa-utils=1.1.8-2 \
     python3-pyaudio
 
+# enable udevd in our container to allow interaction with hardware (e.g. dev board, microphone)
+# since we are running on a privileged container, host OS /dev is mounted to a devtmpfs and udevd is started
+# anytime a new device is plugged in, kernel will notify container udevd daemon and relevant device nodes in /dev will appear
+# https://www.balena.io/docs/reference/base-images/base-images/
 ENV UDEV=1
 
+# creates and sets the working directory
 WORKDIR /usr/src/app
 
 RUN \
     find /lib/modules -type f -name 'galcore.ko' -print0 | xargs -0 -I{} cp {} /usr/src/app/galcore.ko
 
-COPY *.py ./
+# copy files into working directory
+COPY *.py ./ 
 COPY start.sh start.sh
 COPY sound_app.db sound_app.db
 
 ENV UDEV=1
 
+# launch the .sh script
 CMD ["bash","start.sh"]
