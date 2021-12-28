@@ -6,7 +6,8 @@ from datetime import datetime
 # instantiate PyAudio
 audio = pyaudio.PyAudio()
 
-outp ="Audio Information as of {0}\n\n".format(datetime.now(pytz.timezone('Asia/Singapore')))
+now = datetime.now(pytz.timezone('Asia/Singapore'))
+outp ="Audio Information as of {0}\n\n".format(now.replace(tzinfo=None))
 
 # obtain list of device index and name of devices
 outp = outp + "----------------------record device list---------------------\n"
