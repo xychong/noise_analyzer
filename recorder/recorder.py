@@ -70,6 +70,8 @@ MAX_FILE_LENGTH = 4 # Number of seconds until a new file is started while reordi
 
 file_count = 0 # counter for how many files created in this session.
 
+now = datetime.now(pytz.timezone('Asia/Singapore'))
+
 # get WAV file of recorded audio and write into database
 def append_db(filename, max_intensity):
     """
@@ -90,7 +92,7 @@ def append_db(filename, max_intensity):
     sql = """INSERT INTO 'wav_file'('filename', 'timestamp_created', 'current_status', 'threshold', 'avg_intensity')
         VALUES(?, ?, ?, ?, ?);"""
     # Data being inserted
-    data_tuple = (filename, datetime.now(pytz.timezone('Asia/Singapore')), 'created', THRESHOLD, max_intensity)
+    data_tuple = (filename, now.replace(tzinfo=None), 'created', THRESHOLD, max_intensity)
     try:
         cur.execute(sql, data_tuple)
         conn.commit() # Save (commit) the changes
@@ -106,6 +108,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
     (-1 for infinite).
     """
     global file_count, INPUT_INDEX
+
     #Open stream
     p = pyaudio.PyAudio()
 
@@ -188,7 +191,7 @@ def save_speech(data, p):
     """ Saves mic data to WAV file. Returns filename of saved
         file """
 
-    filename = str(int(time.time()))
+    filename = str(now.replace(tzinfo=None))
     # writes data to WAV file
     data = b''.join(data) # perform join on a byte string since data is in bytes
     wf = wave.open(WAV_FILE_PATH + filename + '.wav', 'wb')
