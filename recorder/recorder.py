@@ -70,13 +70,13 @@ MAX_FILE_LENGTH = 4 # Number of seconds until a new file is started while reordi
 
 file_count = 0 # counter for how many files created in this session.
 
-now = datetime.now(pytz.timezone('Asia/Singapore'))
-
 # get WAV file of recorded audio and write into database
 def append_db(filename, max_intensity):
     """
     Writes record to database for new sound file recording
     """
+    
+    now = datetime.now(pytz.timezone('Asia/Singapore'))
 
     if not(path.exists(DB_PATH)):
         print("Database not found. Sleeping 5 seconds awaiting db copy.")
@@ -191,6 +191,7 @@ def save_speech(data, p):
     """ Saves mic data to WAV file. Returns filename of saved
         file """
 
+    now = datetime.now(pytz.timezone('Asia/Singapore'))
     filename = str(now.replace(tzinfo=None))
     # writes data to WAV file
     data = b''.join(data) # perform join on a byte string since data is in bytes
