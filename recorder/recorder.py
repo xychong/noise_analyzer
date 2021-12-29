@@ -38,10 +38,10 @@ else:
 UUID = os.environ.get('RESIN_DEVICE_UUID')[:7] 
 
 # Microphone stream config.
-CHUNK = 1024  # CHUNKS of bytes to read each time from mic
-FORMAT = pyaudio.paInt16 # signed 16-bit binary string to store sound data
-CHANNELS = 1
-RATE = 44100 # sampling rate
+CHUNK = 1024  # read 1024 samples each time from mic
+FORMAT = pyaudio.paInt16 # signed 16-bit binary string to store sound data; each sample is 2 bytes
+CHANNELS = 1 
+RATE = 44100 # sampling rate, i.e. number of samples per second
 th = os.getenv("WAV_REC_THRESHOLD", "2000")  # The threshold intensity that defines silence
                                              # and noise signal (an int. lower than THRESHOLD is silence).
                                              # based on peak ampltude in each chunk of audio data
@@ -111,9 +111,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
 
     #Open stream
     p = pyaudio.PyAudio()
-
-    # Get default input device
-    if INPUT_INDEX == "x":
+    if INPUT_INDEX == "x": # Get default input device
         INPUT_INDEX = p.get_default_input_device_info()["index"]
     print("Using audio input index {0}.".format(INPUT_INDEX))
     stream = p.open(format=FORMAT,
@@ -124,36 +122,39 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
                     frames_per_buffer=CHUNK)
 
     print("Listening to audio input...")
-    audio2send = []
-    cur_data = ''  # current chunk  of audio data
-    rel = RATE/CHUNK
-    slid_win = deque(maxlen=int(SILENCE_LIMIT * rel)+1)
+    audio2send = [] # list containing chunks of audio data
+    cur_data = ''  # current chunk of audio data
+    rel = RATE/CHUNK 
+    slid_win = deque(maxlen=int(SILENCE_LIMIT * rel)+1) # number of chunks to make up silence
     # print("slid_win length: ", len(slid_win))
     #Prepend audio from 0.5 seconds before noise was detected
-    prev_audio = deque(maxlen=int(PREV_AUDIO * rel)+1)
+    prev_audio = deque(maxlen=int(PREV_AUDIO * rel)+1) # number of chunks to make up prev audio
     # print("prev_audio length: ", len(prev_audio))
-    started = False
-    n = num_phrases
+    started = False 
+    n = num_phrases 
     response = []
     file_split = 0
 
     while (num_phrases == -1 or n > 0):
-        cur_data = stream.read(CHUNK, exception_on_overflow = False)
-        slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4))))
-        #print("slid_win length: ", len(slid_win))
+        cur_data = stream.read(CHUNK, exception_on_overflow = False) # read one chunk of data (1024 bytes)
+        # audioop.avg returns average over all samples in one chunk
+        slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 2)))) 
+        print("slid_win length: ", len(slid_win))
         #print("prev_audio length: ", len(prev_audio))
         #print("sum x > threshold: ", sum([x > THRESHOLD for x in slid_win]))
         #print slid_win[-1]
-        if(sum([x > THRESHOLD for x in slid_win]) > 0 and file_split == 0):
+        if(sum([x > THRESHOLD for x in slid_win]) > 0 and file_split == 0): # silence not detected yet
             if(not started):
                 print("Starting file recording...")
                 started = True
-            audio2send.append(cur_data)
-            #print("audio2send length: ", len(audio2send))
-            #print("seconds: ", len(audio2send)/rel)
-            if len(audio2send)/rel > (MAX_FILE_LENGTH - 0.5):
+            audio2send.append(cur_data) # append 1 chunk of data each time
+            # total_num_of_samples = sampling_rate * number_of_seconds 
+            # num_of_chunks = total_num_of_samples / chunk_size
+            #print("audio2send length: ", len(audio2send)) # number of chunks 
+            #print("seconds: ", len(audio2send)/rel) # duaration of audio
+            if len(audio2send)/rel > (MAX_FILE_LENGTH - 0.5): # split file once duration > 3.5s; max duration is 4s
                 file_split = 1
-        elif (started is True):
+        elif (started is True): # silence detected
             print("Finished recording.")
             # The limit was reached, finish capture
             filename = save_speech(list(prev_audio) + audio2send, p)
@@ -178,7 +179,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
                     #TODO: Create a more useful warning
             print("Listening ...")
         else:
-            prev_audio.append(cur_data)
+            prev_audio.append(cur_data) # prepend previous audio; do this for each chunk 
 
     print("Finished recording.")
     stream.close()
