@@ -136,9 +136,9 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
     file_split = 0
 
     while (num_phrases == -1 or n > 0):
-        cur_data = stream.read(CHUNK, exception_on_overflow = False) # read one chunk of data (1024 bytes)
+        cur_data = stream.read(CHUNK, exception_on_overflow = False) # read one chunk of data (1024 samples)
         # audioop.avg returns average over all samples in one chunk
-        slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 2)))) 
+        slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4)))) 
         #print("slid_win length: ", len(slid_win))
         #print("prev_audio length: ", len(prev_audio))
         #print("sum x > threshold: ", sum([x > THRESHOLD for x in slid_win]))
@@ -148,7 +148,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
                 print("Starting file recording...")
                 started = True
             audio2send.append(cur_data) # append 1 chunk of data each time
-            # total_num_of_samples = sampling_rate * n  umber_of_seconds 
+            # total_num_of_samples = sampling_rate * number_of_seconds 
             # num_of_chunks = total_num_of_samples / chunk_size
             #print("audio2send length: ", len(audio2send)) # number of chunks 
             #print("seconds: ", len(audio2send)/rel) # duaration of audio
