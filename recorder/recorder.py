@@ -71,7 +71,7 @@ MAX_FILE_LENGTH = 4 # Number of seconds until a new file is started while reordi
 file_count = 0 # counter for how many files created in this session.
 
 # get WAV file of recorded audio and write into database
-def append_db(filename, max_intensity):
+def append_db(filename):
     """
     Writes record to database for new sound file recording
     """
@@ -89,10 +89,10 @@ def append_db(filename, max_intensity):
 
     cur = conn.cursor() # create a Cursor object
     # Create table
-    sql = """INSERT INTO 'wav_file'('filename', 'timestamp_created', 'current_status', 'threshold', 'avg_intensity')
+    sql = """INSERT INTO 'wav_file'('filename', 'timestamp_created', 'current_status', 'threshold')
         VALUES(?, ?, ?, ?, ?);"""
     # Data being inserted
-    data_tuple = (filename, now.replace(tzinfo=None), 'created', THRESHOLD, max_intensity)
+    data_tuple = (filename, now.replace(tzinfo=None), 'created', THRESHOLD)
     try:
         cur.execute(sql, data_tuple)
         conn.commit() # Save (commit) the changes
@@ -158,7 +158,8 @@ def listen_for_speech(threshold=THRESHOLD):
             filename = save_speech(list(prev_audio) + audio2send, p) # save audio data into WAV file
             print("Saving file {0}, length {1}s.".format(filename, round(len(audio2send)/rel)))
             # Add file info to db so classifier can evaluate it
-            append_db(filename, -1) # append database with audio data in WAV file 
+            append_db(filename) # append database with audio data in WAV file 
+            
             # Reset all settings
             started = False
             slid_win = deque(maxlen=int(SILENCE_LIMIT * rel)+1)
@@ -169,7 +170,8 @@ def listen_for_speech(threshold=THRESHOLD):
             #print(n)
             #n -= 1
             file_split = 0
-            file_count = file_count + 1
+
+            file_count += 1 
             if file_count % 10 == 0:
                 # every ten files that are created, check wav file space usage
                 print("{0} files created so far.".format(str(file_count)))
@@ -181,7 +183,7 @@ def listen_for_speech(threshold=THRESHOLD):
             print("Listening ...")
         else: # silence detected but recording hasn't started
             prev_audio.append(cur_data) # prepend previous audio to current chunk; do this for each chunk 
-            print("prev_audio length: ", len(prev_audio))
+            #print("prev_audio length: ", len(prev_audio))
 
     print("Finished recording.")
     stream.close() # stop stream
