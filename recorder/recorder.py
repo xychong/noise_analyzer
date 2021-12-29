@@ -138,7 +138,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
     while (num_phrases == -1 or n > 0):
         cur_data = stream.read(CHUNK, exception_on_overflow = False) # read one chunk of data (1024 samples)
         # audioop.avg returns average over all samples in one chunk
-        slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4)))) # obtain intensity values of audio chunk
+        slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 2)))) # obtain intensity values of audio chunk
         #print("slid_win length: ", len(slid_win))
         #print("prev_audio length: ", len(prev_audio))
         #print("sum x > threshold: ", sum([x > THRESHOLD for x in slid_win]))
