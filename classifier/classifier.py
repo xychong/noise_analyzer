@@ -98,7 +98,7 @@ while True:
             #input_tensor[:, :] = predict_x
             now = datetime.now(pytz.timezone('Asia/Singapore'))
             start_time = now.replace(tzinfo=None)
-            #print(start_time)
+            print(start_time)
             interpreter.invoke()
             now = datetime.now(pytz.timezone('Asia/Singapore'))
             end_time = now.replace(tzinfo=None)
