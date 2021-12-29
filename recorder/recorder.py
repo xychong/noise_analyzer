@@ -125,11 +125,11 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
     audio2send = [] # list containing chunks of audio data
     cur_data = ''  # current chunk of audio data
     rel = RATE/CHUNK 
-    slid_win = deque(maxlen=int(SILENCE_LIMIT * rel)+1) # number of chunks to make up silence
-    #print("slid_win length: ", len(slid_win))
+    slid_win = deque(maxlen=int(SILENCE_LIMIT * rel)+1) # number of chunks to make up silence (44)
+    print("slid_win length: ", len(slid_win))
     #Prepend audio from 0.5 seconds before noise was detected
-    prev_audio = deque(maxlen=int(PREV_AUDIO * rel)+1) # number of chunks to make up prev audio
-    #print("prev_audio length: ", len(prev_audio))
+    prev_audio = deque(maxlen=int(PREV_AUDIO * rel)+1) # number of chunks to make up prev audio (22)
+    print("prev_audio length: ", len(prev_audio))
     started = False 
     n = num_phrases 
     response = [] 
@@ -139,9 +139,9 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
         cur_data = stream.read(CHUNK, exception_on_overflow = False) # read one chunk of data (1024 samples)
         # audioop.avg returns average over all samples in one chunk
         slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4)))) # obtain intensity values of audio chunk
-        print("slid_win length: ", len(slid_win))
+        #print("slid_win length: ", len(slid_win))
         #print("prev_audio length: ", len(prev_audio))
-        print("sum x > threshold: ", sum([x > THRESHOLD for x in slid_win]))
+        #print("sum x > threshold: ", sum([x > THRESHOLD for x in slid_win]))
         #print slid_win[-1]
         if(sum([x > THRESHOLD for x in slid_win]) > 0 and file_split == 0): # check if intensity of chunk exceeds silence threshold
             if(not started):
@@ -154,11 +154,11 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
             #print("seconds: ", len(audio2send)/rel) # duaration of audio
             if len(audio2send)/rel > (MAX_FILE_LENGTH - 0.5): # split file once duration > 3.5s; max duration is 4s
                 file_split = 1
-        elif (started is True): # silence detected
+        elif (started is True): # silence detected in one chunk after recording has started
             print("Finished recording.")
             # The limit was reached, finish capture
             filename = save_speech(list(prev_audio) + audio2send, p)
-            print("Saving file {0}, length {1}s.".format(filename, round(len(audio2send)/rel),2))
+            print("Saving file {0}, length {1}s.".format(filename, round(len(audio2send)/rel)))
             # Add file info to db so classifier can evaluate it
             append_db(filename, -1)
             # Reset all
@@ -178,12 +178,12 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
                     print("Warning: wav files are utilizing more drive space than the specified limit!")
                     #TODO: Create a more useful warning
             print("Listening ...")
-        else:
-            prev_audio.append(cur_data) # prepend previous audio; do this for each chunk 
+        else: # silence detected but recording hasn't started
+            prev_audio.append(cur_data) # prepend previous audio to current chunk; do this for each chunk 
 
     print("Finished recording.")
-    stream.close()
-    p.terminate()
+    stream.close() # stop stream
+    p.terminate() # close PyAudio
 
     return response
 
