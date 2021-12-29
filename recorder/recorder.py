@@ -99,7 +99,7 @@ def append_db(filename, max_intensity):
     except Exception as e:
         print("Error inserting into database: ", e)
 
-def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
+def listen_for_speech(threshold=THRESHOLD):
     """
     Listens to microphone, extracts phrases from it and saves as wav file
     to be analyzed by the classifier. a "phrase" is sound
@@ -131,11 +131,11 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
     prev_audio = deque(maxlen=int(PREV_AUDIO * rel)+1) # number of chunks to make up prev audio (22)
     #print("prev_audio length: ", len(prev_audio)) (0)
     started = False 
-    n = num_phrases 
+    #n = num_phrases 
     response = [] 
     file_split = 0 
 
-    while (num_phrases == -1 or n > 0):
+    while (1):
         cur_data = stream.read(CHUNK, exception_on_overflow = False) # read one chunk of data (1024 samples)
         # audioop.avg returns average over all samples in one chunk
         slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4)))) # obtain intensity values of audio chunk
@@ -167,7 +167,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
             #print(SILENCE_LIMIT)
             #print(PREV_AUDIO)
             #print(n)
-            n -= 1
+            #n -= 1
             file_split = 0
             file_count = file_count + 1
             if file_count % 10 == 0:
@@ -201,7 +201,6 @@ def save_speech(data, p):
     wf = wave.open(WAV_FILE_PATH + filename + '.wav', 'wb')
     wf.setnchannels(1) # set number of channels
     wf.setsampwidth(p.get_sample_size(pyaudio.paInt16)) # set sample width to 2 bytes
-    print(p.get_sample_size(pyaudio.paInt16))
     wf.setframerate(RATE) # set frame rate to be sampling rate
     wf.writeframes(data) # write data into wav file
     wf.close()
