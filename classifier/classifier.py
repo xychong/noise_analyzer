@@ -6,6 +6,7 @@ import librosa
 import numpy as np
 import sqlite3
 import time
+import pytz
 from datetime import datetime, timedelta
 
 DB_FILE = os.getenv("DB_PATH", "/data/sound_app/sound_app.db")  # path and filename of database
@@ -74,7 +75,6 @@ conn.row_factory = sqlite3.Row
 cur = conn.cursor() # create a Cursor object
 top_certainty = 0
 second_certainty = 0
-sleep_msg = 1
 
 while True:
     try:
@@ -84,7 +84,6 @@ while True:
         print("[ERROR] %s".format(e))
     if len(recs) > 0:
         print("Found {0} unevaluated file(s).".format(len(recs))) # number of rows of results
-        sleep_msg = 1
     for row in recs:
         print("Evaluating file {0}{1} (id {2})".format(WAV_PATH, row[1], row[0]))
         # do eval here
@@ -97,10 +96,12 @@ while True:
             #tensor_index = input_details['index'] # tensor index in the interpreter
             #input_tensor = interpreter.tensor(tensor_index)()[0]
             #input_tensor[:, :] = predict_x
-            start_time = datetime.now()
+            now = datetime.now(pytz.timezone('Asia/Singapore'))
+            start_time = now.replace(tzinfo=None)
             print(start_time)
             interpreter.invoke()
-            end_time = datetime.now()
+            now = datetime.now(pytz.timezone('Asia/Singapore'))
+            end_time = now.replace(tzinfo=None)
             print(end_time)
             duration = str(end_time - start_time)
             print("Interpreter duration: ", duration)
@@ -121,6 +122,9 @@ while True:
             if top_certainty >= CERTAINTY_THRESHOLD:
                 if AUTO_DELETE == "true":
                     print("Top guess above threshold, updating database and deleting sound file.")
+                    now = datetime.now(pytz.timezone('Asia/Singapore'))
+                    print(start_time)
+                    print(now.replace(tzinfo=None))
                     sql = """UPDATE wav_file SET timestamp_evaluated='{0}',
                           timestamp_deleted='{1}',
                           interpreter_class='{2}',
@@ -132,7 +136,7 @@ while True:
                           interpreter_class2_id={7},
                           certainty_threshold={8},
                           classify_duration='{9}'
-                          WHERE my_rowid = {10}""".format(str(start_time), str(datetime.now()), sound_names[ind[0]], top_certainty, sound_names[ind[1]], second_certainty, ind[0], ind[1], CERTAINTY_THRESHOLD, duration, row[0])
+                          WHERE my_rowid = {10}""".format(start_time, now.replace(tzinfo=None), sound_names[ind[0]], top_certainty, sound_names[ind[1]], second_certainty, ind[0], ind[1], CERTAINTY_THRESHOLD, duration, row[0])
                     # Delete file
                     os.remove(WAV_PATH + row[1])
                 else:
@@ -147,7 +151,7 @@ while True:
                           interpreter_class2_id={6},
                           certainty_threshold={7},
                           classify_duration='{8}'
-                          WHERE my_rowid = {9}""".format(str(start_time), sound_names[ind[0]], top_certainty, sound_names[ind[1]], second_certainty, ind[0], ind[1], CERTAINTY_THRESHOLD, duration, row[0])
+                          WHERE my_rowid = {9}""".format(start_time, sound_names[ind[0]], top_certainty, sound_names[ind[1]], second_certainty, ind[0], ind[1], CERTAINTY_THRESHOLD, duration, row[0])
 
             else:
                 print("Top guess below threshold, saving file for further review.")
@@ -162,7 +166,7 @@ while True:
                      interpreter_class2_id={6},
                      certainty_threshold={7},
                      classify_duration='{8}'
-                     WHERE my_rowid = {9}""".format(time.strftime('%Y-%m-%d %H:%M:%S'), sound_names[ind[0]], top_certainty, sound_names[ind[1]], second_certainty, ind[0], ind[1], CERTAINTY_THRESHOLD, duration, row[0])
+                     WHERE my_rowid = {9}""".format(start_time, sound_names[ind[0]], top_certainty, sound_names[ind[1]], second_certainty, ind[0], ind[1], CERTAINTY_THRESHOLD, duration, row[0])
 
         else:
             print("Wav file not found, continuing to next file...")
@@ -173,7 +177,7 @@ while True:
 
     cur.close() # close cursor and reset results
     cur = conn.cursor()
-    if sleep_msg == 1:
-        print("No unevaluated files left in the queue, waiting...")
-        sleep_msg = 0
+    
+    print("No unevaluated files left in the queue, waiting...")
+    
     time.sleep(2) # suspend execution for 2 seconds
