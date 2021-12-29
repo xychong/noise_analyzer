@@ -164,9 +164,9 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
             slid_win = deque(maxlen=int(SILENCE_LIMIT * rel)+1)
             prev_audio = deque(maxlen=int(PREV_AUDIO * rel)+1)
             audio2send = []
-            print(SILENCE_LIMIT)
-            print(PREV_AUDIO)
-            print(n)
+            #print(SILENCE_LIMIT)
+            #print(PREV_AUDIO)
+            #print(n)
             n -= 1
             file_split = 0
             file_count = file_count + 1
@@ -174,7 +174,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
                 # every ten files that are created, check wav file space usage
                 print("{0} files created so far.".format(str(file_count)))
                 root_directory = Path('WAV_FILE_PATH')
-                wav_space = sum(f.stat().st_size for f in root_directory.glob('*.wav') if f.is_file())
+                wav_space = sum(f.stat().st_size for f in root_directory.glob('*.wav') if f.is_file()) # calculate size of all WAV files generated
                 if wav_space > WAV_FILE_LIMIT:
                     print("Warning: wav files are utilizing more drive space than the specified limit!")
                     #TODO: Create a more useful warning
@@ -199,10 +199,11 @@ def save_speech(data, p):
     # writes data to WAV file
     data = b''.join(data) # perform join on a byte string since data is in bytes
     wf = wave.open(WAV_FILE_PATH + filename + '.wav', 'wb')
-    wf.setnchannels(1)
-    wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
-    wf.setframerate(RATE)
-    wf.writeframes(data)
+    wf.setnchannels(1) # set number of channels
+    wf.setsampwidth(p.get_sample_size(pyaudio.paInt16)) # set sample width to 2 bytes
+    print(p.get_sample_size(pyaudio.paInt16))
+    wf.setframerate(RATE) # set frame rate to be sampling rate
+    wf.writeframes(data) # write data into wav file
     wf.close()
     return filename + '.wav'
 
