@@ -90,7 +90,7 @@ def append_db(filename):
     cur = conn.cursor() # create a Cursor object
     # Create table
     sql = """INSERT INTO 'wav_file'('filename', 'timestamp_created', 'current_status', 'threshold')
-        VALUES(?, ?, ?, ?, ?);"""
+        VALUES(?, ?, ?, ?);"""
     # Data being inserted
     data_tuple = (filename, now.replace(tzinfo=None), 'created', THRESHOLD)
     try:
@@ -149,8 +149,8 @@ def listen_for_speech(threshold=THRESHOLD):
             # total_num_of_samples = sampling_rate * number_of_seconds 
             # num_of_chunks = total_num_of_samples / chunk_size
             #print("audio2send length: ", len(audio2send)) # number of chunks 
-            #print("seconds: ", len(audio2send)/rel) # duaration of audio
-            if len(audio2send)/rel > (MAX_FILE_LENGTH - 0.5): # split file once duration > 3.5s; max duration is 4s
+            #print("seconds: ", len(audio2send)/rel) # duration of audio
+            if len(audio2send)/rel > (MAX_FILE_LENGTH - 0.5): # split file once duration > 3.5s; max duration is 4s (got 0.5s of prev audio)
                 file_split = 1
         elif (started is True): # silence detected in one chunk after recording has started
             print("Finished recording.")
