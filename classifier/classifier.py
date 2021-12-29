@@ -98,11 +98,11 @@ while True:
             #input_tensor[:, :] = predict_x
             now = datetime.now(pytz.timezone('Asia/Singapore'))
             start_time = now.replace(tzinfo=None)
-            print(start_time)
+            #print(start_time)
             interpreter.invoke()
             now = datetime.now(pytz.timezone('Asia/Singapore'))
             end_time = now.replace(tzinfo=None)
-            print(end_time)
+            #print(end_time)
             duration = str(end_time - start_time)
             print("Interpreter duration: ", duration)
             #tflite_model_predictions = interpreter.get_tensor(output_details[0]['index'])
@@ -123,8 +123,7 @@ while True:
                 if AUTO_DELETE == "true":
                     print("Top guess above threshold, updating database and deleting sound file.")
                     now = datetime.now(pytz.timezone('Asia/Singapore'))
-                    print(start_time)
-                    print(now.replace(tzinfo=None))
+                    print(start_time)                  
                     sql = """UPDATE wav_file SET timestamp_evaluated='{0}',
                           timestamp_deleted='{1}',
                           interpreter_class='{2}',
@@ -141,6 +140,7 @@ while True:
                     os.remove(WAV_PATH + row[1])
                 else:
                     print("Top guess above threshold, updating database, auto-delete OFF.")
+                    print(start_time)
                     sql = """UPDATE wav_file SET timestamp_evaluated='{0}',
                           interpreter_class='{1}',
                           interpreter_certainty={2},
@@ -155,7 +155,7 @@ while True:
 
             else:
                 print("Top guess below threshold, saving file for further review.")
-
+                print(start_time)
                 sql = """UPDATE wav_file SET timestamp_evaluated='{0}',
                      interpreter_class='{1}',
                      interpreter_certainty={2},
