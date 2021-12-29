@@ -98,8 +98,10 @@ while True:
             #input_tensor = interpreter.tensor(tensor_index)()[0]
             #input_tensor[:, :] = predict_x
             start_time = datetime.now()
+            print(start_time)
             interpreter.invoke()
             end_time = datetime.now()
+            print(end_time)
             duration = str(end_time - start_time)
             print("Interpreter duration: ", duration)
             #tflite_model_predictions = interpreter.get_tensor(output_details[0]['index'])
@@ -167,9 +169,9 @@ while True:
             sql = "UPDATE wav_file SET current_status='missing' WHERE my_rowid = {0}".format(row[0])
 
         conn.execute(sql)
-        conn.commit()
+        conn.commit() # Save (commit) the changes
 
-    cur.close()
+    cur.close() # close cursor and reset results
     cur = conn.cursor()
     if sleep_msg == 1:
         print("No unevaluated files left in the queue, waiting...")
