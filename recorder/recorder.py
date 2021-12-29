@@ -126,10 +126,10 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
     cur_data = ''  # current chunk of audio data
     rel = RATE/CHUNK 
     slid_win = deque(maxlen=int(SILENCE_LIMIT * rel)+1) # number of chunks to make up silence (44)
-    print("slid_win length: ", len(slid_win))
+    #print("slid_win length: ", len(slid_win)) (0)
     #Prepend audio from 0.5 seconds before noise was detected
     prev_audio = deque(maxlen=int(PREV_AUDIO * rel)+1) # number of chunks to make up prev audio (22)
-    print("prev_audio length: ", len(prev_audio))
+    #print("prev_audio length: ", len(prev_audio)) (0)
     started = False 
     n = num_phrases 
     response = [] 
@@ -139,10 +139,8 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
         cur_data = stream.read(CHUNK, exception_on_overflow = False) # read one chunk of data (1024 samples)
         # audioop.avg returns average over all samples in one chunk
         slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4)))) # obtain intensity values of audio chunk
-        #print("slid_win length: ", len(slid_win))
-        #print("prev_audio length: ", len(prev_audio))
+        print("slid_win length: ", len(slid_win))
         #print("sum x > threshold: ", sum([x > THRESHOLD for x in slid_win]))
-        #print slid_win[-1]
         if(sum([x > THRESHOLD for x in slid_win]) > 0 and file_split == 0): # check if intensity of chunk exceeds silence threshold
             if(not started):
                 print("Starting file recording...")
@@ -157,15 +155,16 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
         elif (started is True): # silence detected in one chunk after recording has started
             print("Finished recording.")
             # The limit was reached, finish capture
-            filename = save_speech(list(prev_audio) + audio2send, p)
+            filename = save_speech(list(prev_audio) + audio2send, p) # save audio data into WAV file
             print("Saving file {0}, length {1}s.".format(filename, round(len(audio2send)/rel)))
             # Add file info to db so classifier can evaluate it
-            append_db(filename, -1)
+            append_db(filename, -1) # append database with audio data in WAV file 
             # Reset all
             started = False
             slid_win = deque(maxlen=int(SILENCE_LIMIT * rel)+1)
             prev_audio = deque(maxlen=int(PREV_AUDIO * rel)+1)
             audio2send = []
+            print(n)
             n -= 1
             file_split = 0
             file_count = file_count + 1
@@ -180,6 +179,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
             print("Listening ...")
         else: # silence detected but recording hasn't started
             prev_audio.append(cur_data) # prepend previous audio to current chunk; do this for each chunk 
+            print("prev_audio length: ", len(prev_audio))
 
     print("Finished recording.")
     stream.close() # stop stream
