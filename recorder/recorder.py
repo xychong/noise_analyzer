@@ -139,7 +139,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
         cur_data = stream.read(CHUNK, exception_on_overflow = False) # read one chunk of data (1024 samples)
         # audioop.avg returns average over all samples in one chunk
         slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4)))) # obtain intensity values of audio chunk
-        print("slid_win length: ", len(slid_win))
+        #print("slid_win length: ", len(slid_win))
         #print("sum x > threshold: ", sum([x > THRESHOLD for x in slid_win]))
         if(sum([x > THRESHOLD for x in slid_win]) > 0 and file_split == 0): # check if intensity of chunk exceeds silence threshold
             if(not started):
@@ -159,11 +159,13 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
             print("Saving file {0}, length {1}s.".format(filename, round(len(audio2send)/rel)))
             # Add file info to db so classifier can evaluate it
             append_db(filename, -1) # append database with audio data in WAV file 
-            # Reset all
+            # Reset all settings
             started = False
             slid_win = deque(maxlen=int(SILENCE_LIMIT * rel)+1)
             prev_audio = deque(maxlen=int(PREV_AUDIO * rel)+1)
             audio2send = []
+            print(SILENCE_LIMIT)
+            print(PREV_AUDIO)
             print(n)
             n -= 1
             file_split = 0
