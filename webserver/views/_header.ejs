@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>Coral Noise Analysis</title>
+<title>Noise Analysis with Coral Dev Board</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="w3.css">
@@ -56,10 +56,10 @@ function modalShow(formID, wavID, cname, fname) {
   document.getElementById("hidWavID2").value = wavID;
   if (formID == "id01") {
     // Upload modal
-    document.getElementById("predictClass").value = cname;
+    //document.getElementById("predictClass").value = cname;
   }  else {
     // Delete modal
-    document.getElementById("hidWavFile").value = fname;
+    //document.getElementById("hidWavFile").value = fname;
   }
   if (formID == "id03") {
     // ignore if upload disabled
@@ -84,7 +84,7 @@ function uploading() {
 
 window.onload = function() {
 
-  setTimeout(refreshTable, 30000);
+  setTimeout(refreshTable, 10000);
          
 }
 
@@ -97,7 +97,7 @@ function refreshTable() {
       rt = this.responseText
       document.getElementById("tblBody").innerHTML = rt.substring(6, rt.length);
       document.getElementById("topTitle").innerHTML = "Sound Recordings (" + rt.substring(0, 6).trim() + ")";
-      setTimeout(refreshTable, 30000);
+      setTimeout(refreshTable, 10000);
     }
   }
   let querystring = window.location.search;
@@ -110,8 +110,8 @@ function refreshTable() {
 
 <!-- Navbar -->
 <div class="w3-top">
-  <div class="w3-bar w3-red w3-card w3-left-align w3-large">
-    &nbsp;&nbsp;Noise Analysis
+  <div class="w3-bar w3-blue-grey w3-card w3-left-align w3-xlarge">
+    &nbsp;&nbsp;Noise Monitoring in Schools with Coral Dev Board
   </div>
 
   
