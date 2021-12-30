@@ -1,60 +1,57 @@
-// import sqlite3 module
 const sqlite3 = require("sqlite3").verbose();
-// load modules
 const express = require('express');
 const app = express();
 const {env} = require('process');
 const fs = require('fs');
-// set the view engine
+
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 
-// set environment variables
 let wav_path = env.WAV_PATH || "/data/sound_app/";
 let db_name = env.DB_PATH || "/data/sound_app/sound_app.db";
-var label_file = env.LABEL_FILE || "/data/sound_app/class_labels.txt";
-// var master_node = env.MASTER_NODE || "unknown";
+var label_file = env.LABEL_FILE || "/data/sound_app/labels.txt";
+var master_node = env.MASTER_NODE || "unknown";
 
-// let minio_access_key = env.MINIO_ACCESS_KEY;
-// let minio_secret_key = env.MINIO_SECRET_KEY;
-// let uuid = env.RESIN_DEVICE_UUID;
-// let short_uuid = uuid.substring(0, 8);
-// let menu = [ short_uuid, '#', 'Master', `https://${master_node}.balena-devices.com` ];
-// let menu_items = env.MENU_ITEMS;
-// if (menu_items) {
-//  menu = JSON.parse("[" + string.split() + "]");
-// }
-// var ready_rows = 0;
-// var table_rows = 0;
-// var form_errors = "NA";
-// var Minio = require('minio')
-// var upload_enabled = "OK";
 
-// if (!minio_access_key || !minio_secret_key) {
-//   upload_enabled = "No Minio credentials set";
-// } else {
-//   try {
-//     var minioClient = new Minio.Client({
-//       endPoint: master_node + '.balena-devices.com',
-//       port: 80,
-//       region: 'myregion',
-//       useSSL: false,
-//       accessKey: minio_access_key,
-//       secretKey: minio_secret_key
-//     });
-//   } catch (error) {
-//     upload_enabled = "Minio error";
-//     console.log("Error creating minio client: ", error);
-//   }
-// }
+let minio_access_key = env.MINIO_ACCESS_KEY;
+let minio_secret_key = env.MINIO_SECRET_KEY;
+let uuid = env.RESIN_DEVICE_UUID;
+let short_uuid = uuid.substring(0, 8);
+let menu = [ short_uuid, '#', 'Master', `https://${master_node}.balena-devices.com` ];
+let menu_items = env.MENU_ITEMS;
+if (menu_items) {
+  menu = JSON.parse("[" + string.split() + "]");
+}
+var ready_rows = 0;
+var table_rows = 0;
+var form_errors = "NA";
+var Minio = require('minio')
+var upload_enabled = "OK";
+
+if (!minio_access_key || !minio_secret_key) {
+  upload_enabled = "No Minio credentials set";
+} else {
+  try {
+    var minioClient = new Minio.Client({
+      endPoint: master_node + '.balena-devices.com',
+      port: 80,
+      region: 'myregion',
+      useSSL: false,
+      accessKey: minio_access_key,
+      secretKey: minio_secret_key
+    });
+  } catch (error) {
+    upload_enabled = "Minio error";
+    console.log("Error creating minio client: ", error);
+  }
+}
 
 // Enable HTML template middleware
-// mapping EJS template engine to '.html' files
 app.engine('html', require('ejs').renderFile);
 
-// Static files don't change when application is running
-// Serve static CSS files
+// Enable static CSS styles
 app.use(express.static('styles'));
+
 // Enable access to wav files
 app.use("/public", express.static(wav_path));
 
@@ -347,7 +344,7 @@ function getSQL(filter, srtid) {
 
 // reply to home page request
 app.get('/', function (req, res) {
-  // getReadyCount(0, cb_readyCount);
+  getReadyCount(0, cb_readyCount);
   //console.log("GETSQL for home page render: ",  getSQL(req.query.filter, req.query.srtid));
   db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
     if (err) {
@@ -428,12 +425,12 @@ app.post('/', async (req, res, next) => {
         }
       }  else {
         // Upload form posted
-        // frmErr = await doUpload()
+        frmErr = await doUpload()
         //console.log("moving on...");
       }
   }
 
-  // getReadyCount(0, cb_readyCount);
+  getReadyCount(0, cb_readyCount);
   //console.log("GETSQL for home page render after POST: ",  getSQL(req.query.filter, req.query.srtid));
   db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
     if (err) {
@@ -443,7 +440,7 @@ app.post('/', async (req, res, next) => {
   });
 });
 
-// open SQLite database and provide error information
+// SQLite database connection
 const db = new sqlite3.Database(db_name, err => {
   if (err) {
     return console.error(err.message);
