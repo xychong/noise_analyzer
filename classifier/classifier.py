@@ -98,11 +98,11 @@ while True:
             #input_tensor[:, :] = predict_x
             now = datetime.now(pytz.timezone('Asia/Singapore'))
             start_time = now.replace(tzinfo=None) # remove time zone information
-            print(str(start_time))
+            #print(str(start_time))
             interpreter.invoke()
             now = datetime.now(pytz.timezone('Asia/Singapore'))
             end_time = now.replace(tzinfo=None) # remove time zone information
-            print(str(end_time))
+            #print(str(end_time))
             duration = str(end_time - start_time)
             print("Interpreter duration: ", duration)
             #tflite_model_predictions = interpreter.get_tensor(output_details[0]['index'])
