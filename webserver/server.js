@@ -75,113 +75,113 @@ try {
 console.log("Read in", labels.length, "labels:");
 console.log(labels);
 
-// function getReadyCount(uid, callback){
-//   var query = "SELECT filename FROM wav_file WHERE current_status = 'ready'";
-//   db.all(query, function (err, rows) {
-//     if(err){
-//         console.log(err);
-//     }else{
-//         callback(rows.length);
-//     }
-//   });
-// }
+function getReadyCount(uid, callback){
+  var query = "SELECT filename FROM wav_file WHERE current_status = 'ready'";
+  db.all(query, function (err, rows) {
+    if(err){
+        console.log(err);
+    }else{
+        callback(rows.length);
+    }
+  });
+}
 
-// function cb_readyCount(rowcount) {
-//   //console.log("print:",rowcount);
-//   ready_rows = rowcount;
-// }
-
-
-// async function doUpload() {
-//   return new Promise( async (resolve, reject) => {
-//     let row_id = 0;
-//     let sql = "";
-//     let frmErr = "NA";
-//     form_errors = "";
-//     let metaData = "";
-//     if (master_node != "unknown") {
-//       sql = "SELECT my_rowid, filename, user_class, user_class_id, user_description FROM wav_file WHERE current_status = 'ready'";
-//       db.all(sql, [], async (err,rows) => {
-//        if (err) {
-//          form_errors = formErrors + ", " + err.message;
-//          console.error(err.message);
-//        }
-//        for (const row of rows) {
-//          await doUploadTasks(row)
-//          //console.log("Completed one doUploadTasks");
-//        }
-//        if (frmErr != "NA") {
-//          frmErr = "<h4 style='color:red;'>One or more errors during file upload: " + form_errors + "</h4>";
-//        } else {
-//          frmErr = "<h4 style='color:green;'>File(s) successfully uploaded.</h4>";
-//        }
-//        resolve(frmErr);
-//       });  // end outer db;
-
-//     } else {
-//       // master node not set
-//       frmErr = "<h4 style='color:red;'>Master node unknown. You must set value in balena dashboard.</h4>";
-//       reject(frmErr);
-//     }
-//   });  // end promise
-// }
+function cb_readyCount(rowcount) {
+  //console.log("print:",rowcount);
+  ready_rows = rowcount;
+}
 
 
-// async function doUploadTasks(row) {
+async function doUpload() {
+  return new Promise( async (resolve, reject) => {
+    let row_id = 0;
+    let sql = "";
+    let frmErr = "NA";
+    form_errors = "";
+    let metaData = "";
+    if (master_node != "unknown") {
+      sql = "SELECT my_rowid, filename, user_class, user_class_id, user_description FROM wav_file WHERE current_status = 'ready'";
+      db.all(sql, [], async (err,rows) => {
+       if (err) {
+         form_errors = formErrors + ", " + err.message;
+         console.error(err.message);
+       }
+       for (const row of rows) {
+         await doUploadTasks(row)
+         //console.log("Completed one doUploadTasks");
+       }
+       if (frmErr != "NA") {
+         frmErr = "<h4 style='color:red;'>One or more errors during file upload: " + form_errors + "</h4>";
+       } else {
+         frmErr = "<h4 style='color:green;'>File(s) successfully uploaded.</h4>";
+       }
+       resolve(frmErr);
+      });  // end outer db;
 
-//   var filename = "";
-//   let p = new Promise(async (resolve, reject) => {
-//     let sql = "";
-//     let bucket = "uploads";
+    } else {
+      // master node not set
+      frmErr = "<h4 style='color:red;'>Master node unknown. You must set value in balena dashboard.</h4>";
+      reject(frmErr);
+    }
+  });  // end promise
+}
 
-//     // upload to master
-//     filename = uuid.substring(0, 7) + "-" + row.user_class_id + "-" + row.filename;
-//     let row_id = row.my_rowid;
-//     let metaData = {
-//       'Content-Type': 'application/octet-stream',
-//       'x-amz-meta-rowid': row_id,
-//       'x-amz-meta-class': row.user_class,
-//       'x-amz-meta-descrip': row.user_description
-//     }
-//     console.log("uploading: ", filename);
-//     try {
-//         url = await minioClient.fPutObject(bucket, filename, wav_path + row.filename, metaData);
-//     } catch(error) {
-//         console.log('minio upload error: ' + error.message);
-//         form_errors = form_errors + ", " + error.message;
-//         resolve(10);
-//     }
-//     //console.log('File ' + filename + ' uploaded successfully.');
-//     resolve(10);
-//   });
 
-//   return p.then((result) => {
-//     console.log(result);
-//     return new Promise((resolve, reject) => {
-//       row_id = row.my_rowid;
-//       sql = "UPDATE wav_file SET timestamp_deleted = datetime('now'), timestamp_uploaded = datetime('now'), current_status = 'uploaded', remote_filename = '" + filename + "' WHERE (my_rowid = " + row_id + ")";
-//       console.log("post upload SQL: ", sql);
-//       db.run(sql, err => {
-//         if (err) {
-//           form_errors = form_errors + ", " + err.message;
-//         }
-//       });
-//       resolve(20);
-//       });
-//   }).then((result) => {
-//     //console.log(result);
-//     return new Promise((resolve, reject) => {
-//       //console.log("deleting file ", row.filename);
-//       fs.unlinkSync(wav_path + row.filename, function (err) {
-//       if (err) {
-//         form_errors = form_errors + ", " + err.message;
-//       }
-//     });
-//     resolve(30);
-//     });
-//   }).then(result => console.log(result));
+async function doUploadTasks(row) {
 
-// }
+  var filename = "";
+  let p = new Promise(async (resolve, reject) => {
+    let sql = "";
+    let bucket = "uploads";
+
+    // upload to master
+    filename = uuid.substring(0, 7) + "-" + row.user_class_id + "-" + row.filename;
+    let row_id = row.my_rowid;
+    let metaData = {
+      'Content-Type': 'application/octet-stream',
+      'x-amz-meta-rowid': row_id,
+      'x-amz-meta-class': row.user_class,
+      'x-amz-meta-descrip': row.user_description
+    }
+    console.log("uploading: ", filename);
+    try {
+        url = await minioClient.fPutObject(bucket, filename, wav_path + row.filename, metaData);
+    } catch(error) {
+        console.log('minio upload error: ' + error.message);
+        form_errors = form_errors + ", " + error.message;
+        resolve(10);
+    }
+    //console.log('File ' + filename + ' uploaded successfully.');
+    resolve(10);
+  });
+
+  return p.then((result) => {
+    console.log(result);
+    return new Promise((resolve, reject) => {
+      row_id = row.my_rowid;
+      sql = "UPDATE wav_file SET timestamp_deleted = datetime('now'), timestamp_uploaded = datetime('now'), current_status = 'uploaded', remote_filename = '" + filename + "' WHERE (my_rowid = " + row_id + ")";
+      console.log("post upload SQL: ", sql);
+      db.run(sql, err => {
+        if (err) {
+          form_errors = form_errors + ", " + err.message;
+        }
+      });
+      resolve(20);
+      });
+  }).then((result) => {
+    //console.log(result);
+    return new Promise((resolve, reject) => {
+      //console.log("deleting file ", row.filename);
+      fs.unlinkSync(wav_path + row.filename, function (err) {
+      if (err) {
+        form_errors = form_errors + ", " + err.message;
+      }
+    });
+    resolve(30);
+    });
+  }).then(result => console.log(result));
+
+}
 
 async function buildTable(req) {
   return new Promise( async (resolve, reject) => {
