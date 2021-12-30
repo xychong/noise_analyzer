@@ -146,7 +146,7 @@
       <form id="filForm">
         <input id="filter1" class="w3-radio" type="radio" onchange="formSubmit(this)" name="filter" value="filter1"<%if (fil == "filter1" || (!fil) ) {%> checked<% } %>>
         <label>All Recordings</label> &nbsp;&nbsp;&nbsp;
-        <input id="filter2" class="w3-radio" type="radio" onchange="formSubmit(this)" name="filter" value="filter2"<%if (fil == "filter2") {%> checked<% } %>>
+        <input id="filter3" class="w3-radio" type="radio" onchange="formSubmit(this)" name="filter" value="filter3"<%if (fil == "filter3") {%> checked<% } %>>
         <label>Deleted</label>
         <input id="hidSrt" type="hidden" name="srtid" value="<%= srtid %>">
       </form>
@@ -181,12 +181,12 @@
                     </td>
                 <td style="vertical-align: bottom;">
                 
-                <% if (wav.current_status != "deleted") { %>
+                <% if (wav.current_status != "deleted" && wav.current_status != "uploaded") { %>
                   <audio controls><source src="/public/<%= wav.filename %>"></audio> &nbsp;
                 <% } %>
                 </td>
                 <td style="vertical-align: middle;">
-                <% if (wav.current_status != "deleted") { %>
+                <% if (wav.current_status != "deleted" && wav.current_status != "uploaded") { %>
                   <a class="w3-button w3-circle w3-small w3-red" onclick="modalShow('id02',<%= wav.my_rowid %>, '<%= wav.interpreter_class_id %>', '<%= wav.filename %>')"><i class="fa fa-trash"></i></a> &nbsp;
                 <% } %>
                 <% if (wav.current_status == "evaluated") { %>
