@@ -1,6 +1,6 @@
 <%- include("_header") -%>
 
-<!-- Upload Modal 1
+Upload Modal 1
 <div id="id01" class="w3-modal">
   <div class="w3-modal-content w3-card-4 w3-animate-top">
     <header class="w3-container w3-theme-l1"> 
@@ -43,7 +43,7 @@
   </div>
 </form>
 </div>
-</div> -->
+</div>
 
 <!-- Delete Modal -->
 <div id="id02" class="w3-modal">
@@ -76,7 +76,7 @@
 </div>
 </div>
 
-<!-- Upload Modal 2
+Upload Modal 2
 <div id="id03" class="w3-modal">
   <div class="w3-modal-content w3-card-4 w3-animate-top">
     <header class="w3-container w3-theme-l1">
@@ -106,7 +106,7 @@
   </div>
 </form>
 </div>
-</div> -->
+</div>
 
 <!-- Info Modal -->
 <div id="id04" class="w3-modal">
@@ -145,14 +145,12 @@
       Filter by:
       <form id="filForm">
         <input id="filter1" class="w3-radio" type="radio" onchange="formSubmit(this)" name="filter" value="filter1"<%if (fil == "filter1" || (!fil) ) {%> checked<% } %>>
-        <label>Not Uploaded</label> &nbsp;&nbsp;&nbsp;
-        <input id="filter2" class="w3-radio" type="radio" onchange="formSubmit(this)" name="filter" value="filter2"<%if (fil == "filter2") {%> checked<% } %>>
-        <label>Uploaded</label> &nbsp;&nbsp;
+        <label>All Recordings</label> &nbsp;&nbsp;&nbsp;
         <input id="filter3" class="w3-radio" type="radio" onchange="formSubmit(this)" name="filter" value="filter3"<%if (fil == "filter3") {%> checked<% } %>>
         <label>Deleted</label>
         <input id="hidSrt" type="hidden" name="srtid" value="<%= srtid %>">
       </form>
-    </td><td style="text-align:right;">
+    <!-- </td><td style="text-align:right;">
       Files ready for upload: <%= readyCount %> <br />
       <button id="btnUploadAll" 
          <% if (readyCount == 0 || upload_enabled != 'OK') { %>
@@ -164,7 +162,7 @@
          <% if (upload_enabled != 'OK') { %>
            <br><span style="font-size:75%;color:#993300">(<%= upload_enabled %>)</span>
          <% } %>
-    </td></tr></table>
+    </td></tr></table> -->
 
     <br><br>
 

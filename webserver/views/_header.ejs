@@ -84,7 +84,7 @@ function modalShow(formID, wavID, cname, fname) {
 
 window.onload = function() {
 
-  setTimeout(refreshTable, 30000);
+  setTimeout(refreshTable, 60000);
          
 }
 
@@ -97,7 +97,7 @@ function refreshTable() {
       rt = this.responseText
       document.getElementById("tblBody").innerHTML = rt.substring(6, rt.length);
       document.getElementById("topTitle").innerHTML = "Sound Recordings (" + rt.substring(0, 6).trim() + ")";
-      setTimeout(refreshTable, 30000);
+      setTimeout(refreshTable, 60000);
     }
   }
   let querystring = window.location.search;
