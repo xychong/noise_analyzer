@@ -380,56 +380,55 @@ app.post('/', async (req, res, next) => {
   //console.log('Form submitted: ', req.body);
   let sql = "UPDATE wav_file SET ";
   // Validate form input
-  if (req.body.hidFormName == "id01") {
+  // if (req.body.hidFormName == "id01") {
 
-    if (req.body.predictClass == "other" && (req.body.txtDescription === undefined || req.body.txtDescription == "")) {
-      frmErr = "<h4 style='color:red;'>Description is required. File not uploaded!</h4>";
-    } else {
-        // upload details form posted
-        // update db here
-        const heard = [req.body.predictClass, labels[req.body.predictClass], req.body.txtDescription, req.body.txtNotes, req.body.hidWavID1];
-        sql = sql + "user_class_id = ?, user_class = ?, user_description = ?, user_notes = ?, current_status = 'ready', timestamp_ready = datetime('now') WHERE (rowid = ?)";
-        //console.log("Upload SQL: ", sql);
-        db.run(sql, heard, err => {
-          if (err) {
-            frmErr = err.message;
-          }
-        });
-        // upload file
-        if (frmErr != "NA") {
-          frmErr = "<h4 style='color:red;'>Error tagging file for upload: " + frmErr + "</h4>";
-        } else {
-          frmErr = "<h4 style='color:green;'>File successfully tagged for upload.</h4>";
-        }
-    }  // end else blank description
+  //   if (req.body.predictClass == "other" && (req.body.txtDescription === undefined || req.body.txtDescription == "")) {
+  //     frmErr = "<h4 style='color:red;'>Description is required. File not uploaded!</h4>";
+  //   } else {
+  //       // upload details form posted
+  //       // update db here
+  //       const heard = [req.body.predictClass, labels[req.body.predictClass], req.body.txtDescription, req.body.txtNotes, req.body.hidWavID1];
+  //       sql = sql + "user_class_id = ?, user_class = ?, user_description = ?, user_notes = ?, current_status = 'ready', timestamp_ready = datetime('now') WHERE (rowid = ?)";
+  //       //console.log("Upload SQL: ", sql);
+  //       db.run(sql, heard, err => {
+  //         if (err) {
+  //           frmErr = err.message;
+  //         }
+  //       });
+  //       // upload file
+  //       if (frmErr != "NA") {
+  //         frmErr = "<h4 style='color:red;'>Error tagging file for upload: " + frmErr + "</h4>";
+  //       } else {
+  //         frmErr = "<h4 style='color:green;'>File successfully tagged for upload.</h4>";
+  //       }
+  //   }  // end else blank description
 
-  } else {
-      if (req.body.hidFormName == "id02") {
-        // delete file form posted
-        // update db
-        sql = sql + "timestamp_deleted = datetime('now'), current_status = 'deleted' WHERE (my_rowid = " + req.body.hidWavID2 + ")";
-        //console.log("Delete SQL: ", sql);
-        db.run(sql, err => {
-          if (err) {
-            frmErr = err.message;
-          }
-        });
-        // delete file
-        fs.unlinkSync(wav_path + req.body.hidWavFile, function (err) {
-          if (err) {
-            frmErr = frmErr + " " + err.message;
-          }
-        });
-        if (frmErr != "NA") {
-          frmErr = "<h4 style='color:red;'>Error deleting file: " + frmErr + "</h4>";
-        } else {
-          frmErr = "<h4 style='color:green;'>File successfully deleted.</h4>";
-        }
-      }  else {
-        // Upload form posted
-        frmErr = await doUpload()
-        //console.log("moving on...");
+  // } 
+  if (req.body.hidFormName == "id02") {
+    // delete file form posted
+    // update db
+    sql = sql + "timestamp_deleted = datetime('now'), current_status = 'deleted' WHERE (my_rowid = " + req.body.hidWavID2 + ")";
+    //console.log("Delete SQL: ", sql);
+    db.run(sql, err => {
+      if (err) {
+        frmErr = err.message;
       }
+    });
+    // delete file
+    fs.unlinkSync(wav_path + req.body.hidWavFile, function (err) {
+    if (err) {
+      frmErr = frmErr + " " + err.message;
+    }
+    });
+    if (frmErr != "NA") {
+      frmErr = "<h4 style='color:red;'>Error deleting file: " + frmErr + "</h4>";
+    } else {
+      frmErr = "<h4 style='color:green;'>File successfully deleted.</h4>";
+    }
+  } else {
+    // Upload form posted
+    frmErr = await doUpload()
+    //console.log("moving on...");
   }
 
   getReadyCount(0, cb_readyCount);
