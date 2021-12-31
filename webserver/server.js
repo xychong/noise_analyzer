@@ -242,13 +242,13 @@ async function buildTableHTML(row) {
 
     my_table = my_table + "</td><td style='vertical-align: middle;'>"
 
-    if (row.current_status != "deleted" && row.current_status != "uploaded") {
+    if (row.current_status != "deleted" && row.current_status != "uploaded" || row.current_status == "evaluated") {
       my_table = my_table + "<a class='w3-button w3-circle w3-small w3-red' onclick=\"modalShow('id02'," + row.my_rowid + ", '" +  row.interpreter_class_id + "', '" + row.filename + "')\"><i class='fa fa-trash'></i></a> &nbsp;&nbsp;"
     }
 
-    if (row.current_status == "evaluated") {
-      my_table = my_table + "<a class='w3-button w3-circle w3-small w3-blue' onclick=\"modalShow('id02'," + row.my_rowid + ", '" +  row.interpreter_class_id + "', '" + row.filename + "')\"><i class='fa fa-cloud-upload'></i></a>"
-    }
+    // if (row.current_status == "evaluated") {
+    //   my_table = my_table + "<a class='w3-button w3-circle w3-small w3-blue' onclick=\"modalShow('id02'," + row.my_rowid + ", '" +  row.interpreter_class_id + "', '" + row.filename + "')\"><i class='fa fa-cloud-upload'></i></a>"
+    // }
 
     my_table = my_table + "</td></tr>"
 
