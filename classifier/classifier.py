@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 
 DB_FILE = os.getenv("DB_PATH", "/data/sound_app/sound_app.db")  # path and filename of database
 WAV_PATH = os.getenv("WAV_PATH", "/data/sound_app/") # folder with wav files
-MODEL_FILE = os.getenv("MODEL_FILE", "/data/sound_app/mobilenet_v2_sound_classification_float_qat_edgetpu.tflite") # path and filename  with model file
+MODEL_FILE = os.getenv("MODEL_FILE", "/data/sound_app/mobilenet_v2_sound_classification_qat_edgetpu.tflite") # path and filename  with model file
 LABEL_FILE = os.getenv("LABEL_FILE", "/data/sound_app/class_labels.txt") #path and filename of associated model class names
 AUTO_DELETE = os.getenv("AUTO_DELETE", "false") #if equal to true, files above the threshold will automatically be deleted 
 ct = os.getenv("CERTAINTY_THRESHOLD", "70") # minimum value to consider prediction to be acceptable
@@ -91,8 +91,8 @@ while True:
         if path.exists(WAV_PATH + row[1]):
             predict_x = extract_features_only(WAV_PATH + row[1])
             predict_x = np.expand_dims(predict_x, axis=0) # expand from 3D to 4D
-            #interpreter.set_tensor(input_details[0]['index'], predict_x.astype(np.uint8))
-            interpreter.set_tensor(input_details[0]['index'], predict_x.astype(np.float32))
+            interpreter.set_tensor(input_details[0]['index'], predict_x.astype(np.uint8))
+            #interpreter.set_tensor(input_details[0]['index'], predict_x.astype(np.float32))
             #input_details = interpreter.get_input_details()[0] # for one input data
             #tensor_index = input_details['index'] # tensor index in the interpreter
             #input_tensor = interpreter.tensor(tensor_index)()[0]
@@ -115,10 +115,11 @@ while True:
             ind = np.argpartition(tflite_model_predictions[0], -2)[-2:] # obtain array containing indices of top 2 predictions
             #ind[np.argsort(tflite_model_predictions[0][ind])]
             ind = ind[::-1] # reverses the index (descending order)
-            #top_certainty = int((tflite_model_predictions[0][ind[0]])/256 * 100) # calculate probability of top prediction
-            #second_certainty = int((tflite_model_predictions[0][ind[1]])/256 * 100) # calculate probability of second prediction
-            top_certainty = int(tflite_model_predictions[0,ind[0]] * 100)
-            second_certainty = int(tflite_model_predictions[0,ind[1]] * 100)
+            top_certainty = int((tflite_model_predictions[0][ind[0]])/256 * 100) # calculate probability of top prediction (int)
+            second_certainty = int((tflite_model_predictions[0][ind[1]])/256 * 100) # calculate probability of second prediction (int)
+            #top_certainty = int(tflite_model_predictions[0,ind[0]] * 100)  # calculate probability of top prediction (float)
+            #second_certainty = int(tflite_model_predictions[0,ind[1]] * 100)  # calculate probability of top prediction (float)
+            print(MODEL_FILE)
             print("Top guess: ", sound_names[ind[0]], " (",top_certainty,"%)")
             print("2nd guess: ", sound_names[ind[1]], " (",second_certainty,"%)")
 
