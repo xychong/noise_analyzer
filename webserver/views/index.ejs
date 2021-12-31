@@ -198,12 +198,12 @@
                 <% } %>
                 </td>
                 <td style="vertical-align: middle;">
-                <% if (wav.current_status != "deleted" && wav.current_status != "uploaded") { %>
+                <% if (wav.current_status != "deleted" && wav.current_status != "uploaded" || wav.current_status == "evaluated") { %>
                   <a class="w3-button w3-circle w3-small w3-red" onclick="modalShow('id02',<%= wav.my_rowid %>, '<%= wav.interpreter_class_id %>', '<%= wav.filename %>')"><i class="fa fa-trash"></i></a> &nbsp;
                 <% } %>
-                <% if (wav.current_status == "evaluated") { %>
+                <!-- <% if (wav.current_status == "evaluated") { %>
                   <a class="w3-button w3-circle w3-small w3-blue" onclick="modalShow('id01',<%= wav.my_rowid %>, '<%= wav.interpreter_class_id %>', '<%= wav.filename %>')"><i class="fa fa-cloud-upload"></i></a>
-                <% } %>
+                <% } %> -->
                 </td>
                 </tr>
               <% } %>  

@@ -5,7 +5,7 @@ The Google Coral Development Board (Coral Dev Board) comes with a built-in micro
 
 # Files
 
-**sound_edgetpu.tflite** - Tensorflow model in the classifier folder trained on sounds belonging to either of the following 5 sound classes: ambience, footsteps, horn, music and shout. This model has been converted to Tensorflow Lite, quantized and compiled for the Edge TPU. The input and output tensors are uint8 to prevent any latencies caused by data format conversions. The entire model executes on the Edge TPU.
+**mobilenet_v2_sound_classification_qat_edgetpu.tflite** - Tensorflow model in the classifier folder trained on sounds belonging to either of the following 5 sound classes: ambience, footsteps, horn, music and shout. This model has been converted to Tensorflow Lite, quantized and compiled for the Edge TPU. The input and output tensors are uint8 to prevent any latencies caused by data format conversions. The entire model executes on the Edge TPU.
 
 **class_labels.txt** - Text file comprising of 5 labels - ambience, footsteps, horn, music and shout.
 
@@ -34,21 +34,13 @@ Helps to customize the behavior of the application:
 
 **classifier**
 
-`LABEL_FILE` - path and filename of text file with ordered list of classes for associated model (default is `/data/sound_app/labels.txt`)
+`LABEL_FILE` - path and filename of text file with ordered list of classes for associated model (default is `/data/sound_app/class_labels.txt`)
 
-`MODEL_FILE` - path and filename of Edge TPU model file. (default is `/data/sound_app/sound_edgetpu.tflite`)
+`MODEL_FILE` - path and filename of Edge TPU model file. (default is `/data/sound_app/mobilenet_v2_sound_classification_qat_edgetpu.tflite`)
 
 `CERTAINTY_THRESHOLD` - minimum percentage value of top guess to be considered a valid guess (default is 70)
 
 `AUTO_DELETE` - files with a prediction certainty above the `CERTAINTY_THRESHOLD` will automatically be deleted unless this is set to false. (default is false)
-
-**webserver**
-
-`MASTER_NODE` - full UUID of the master node to upload sound files and data for re-training the model. The "Upload" button will be disabled if this is not set.
-
-`MINIO_ACCESS_KEY` - access key for master node's Minio server, the data store for uploading sound files. 
-
-`MINIO_SECRET_KEY` - secret key for master node's Minio server, the data store for uploading sound files. 
 
 **all**
 
