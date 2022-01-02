@@ -185,11 +185,11 @@ def listen_for_speech(threshold=THRESHOLD):
             prev_audio.append(cur_data) # prepend previous audio to current chunk; do this for each chunk 
             #print("prev_audio length: ", len(prev_audio))
 
-    print("Finished recording.")
+    print("Finished.")
     stream.close() # stop stream
     p.terminate() # close PyAudio
 
-    return response
+    #return response
 
 
 def save_speech(data, p):
