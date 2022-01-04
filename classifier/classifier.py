@@ -123,9 +123,9 @@ while True:
             print("Top guess: ", sound_names[ind[0]], " (",top_certainty,"%)")
             print("2nd guess: ", sound_names[ind[1]], " (",second_certainty,"%)")
 
-            if top_certainty >= CERTAINTY_THRESHOLD:
+            if top_certainty < CERTAINTY_THRESHOLD:
                 if AUTO_DELETE == "true":
-                    print("Top guess above threshold, updating database and deleting sound file.")
+                    print("Top guess below threshold, updating database and deleting sound file.")
                     now = datetime.now(pytz.timezone('Asia/Singapore'))
                     #print(start_time)                  
                     sql = """UPDATE wav_file SET timestamp_evaluated='{0}',
@@ -158,7 +158,7 @@ while True:
                           WHERE my_rowid = {9}""".format(start_time, sound_names[ind[0]], top_certainty, sound_names[ind[1]], second_certainty, ind[0], ind[1], CERTAINTY_THRESHOLD, duration, row[0])
 
             else:
-                print("Top guess below threshold, saving file for further review.")
+                print("Top guess above threshold, saving file for further review.")
                 #print(start_time)
                 sql = """UPDATE wav_file SET timestamp_evaluated='{0}',
                      interpreter_class='{1}',
