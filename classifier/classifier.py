@@ -115,8 +115,8 @@ while True:
             ind = np.argpartition(tflite_model_predictions[0], -2)[-2:] # obtain array containing indices of top 2 predictions
             #ind[np.argsort(tflite_model_predictions[0][ind])]
             ind = ind[::-1] # reverses the index (descending order)
-            top_certainty = round((tflite_model_predictions[0][ind[0]])/256 * 100) # calculate probability of top prediction (int)
-            second_certainty = round((tflite_model_predictions[0][ind[1]])/256 * 100) # calculate probability of second prediction (int)
+            top_certainty = int((tflite_model_predictions[0][ind[0]])/256 * 100) # calculate probability of top prediction (int)
+            second_certainty = int((tflite_model_predictions[0][ind[1]])/256 * 100) # calculate probability of second prediction (int)
             #top_certainty = int(tflite_model_predictions[0,ind[0]] * 100)  # calculate probability of top prediction (float)
             #second_certainty = int(tflite_model_predictions[0,ind[1]] * 100)  # calculate probability of top prediction (float)
             print(MODEL_FILE)
