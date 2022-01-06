@@ -429,7 +429,7 @@ app.post('/', async (req, res, next) => {
     }
   } else {
     // Upload form posted
-    // frmErr = await doUpload()
+    frmErr = await doUpload()
     //console.log("moving on...");
   }
 
