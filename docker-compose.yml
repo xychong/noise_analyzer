@@ -10,6 +10,7 @@ services:
   classifier:
     restart: always
     build: ./classifier
+    privileged: true
     volumes:
       - 'shared-data:/data/sound_app'
     depends_on:
