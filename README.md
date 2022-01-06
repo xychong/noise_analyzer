@@ -38,9 +38,9 @@ Helps to customize the behavior of the application:
 
 `MODEL_FILE` - path and filename of Edge TPU model file. (default is `/data/sound_app/mobilenet_v2_sound_classification_qat_edgetpu.tflite`)
 
-`CERTAINTY_THRESHOLD` - minimum percentage value of top guess to be considered a valid guess (default is 70)
+`CERTAINTY_THRESHOLD` - minimum percentage value of top guess to be considered a valid guess (default is 50)
 
-`AUTO_DELETE` - files with a prediction certainty above the `CERTAINTY_THRESHOLD` will automatically be deleted unless this is set to false. (default is false)
+`AUTO_DELETE` - files with a prediction certainty below the `CERTAINTY_THRESHOLD` will automatically be deleted unless this is set to false. (default is false)
 
 **all**
 
