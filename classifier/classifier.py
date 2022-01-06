@@ -13,12 +13,12 @@ DB_FILE = os.getenv("DB_PATH", "/data/sound_app/sound_app.db")  # path and filen
 WAV_PATH = os.getenv("WAV_PATH", "/data/sound_app/") # folder with wav files
 MODEL_FILE = os.getenv("MODEL_FILE", "/data/sound_app/mobilenet_v2_sound_classification_qat_edgetpu.tflite") # path and filename  with model file
 LABEL_FILE = os.getenv("LABEL_FILE", "/data/sound_app/class_labels.txt") #path and filename of associated model class names
-AUTO_DELETE = os.getenv("AUTO_DELETE", "false") #if equal to true, files above the threshold will automatically be deleted 
-ct = os.getenv("CERTAINTY_THRESHOLD", "70") # minimum value to consider prediction to be acceptable
+AUTO_DELETE = os.getenv("AUTO_DELETE", "false") #if equal to true, files below the threshold will automatically be deleted 
+ct = os.getenv("CERTAINTY_THRESHOLD", "50") # minimum value to consider prediction to be acceptable
 if ct.isnumeric():
     CERTAINTY_THRESHOLD = int(ct)
 else:
-    CERTAINTY_THRESHOLD = 70
+    CERTAINTY_THRESHOLD = 50
 
 # Load labels from a file
 sound_names = [line.rstrip('\n') for line in open(LABEL_FILE)]
@@ -93,10 +93,6 @@ while True:
             predict_x = np.expand_dims(predict_x, axis=0) # expand from 3D to 4D
             interpreter.set_tensor(input_details[0]['index'], predict_x.astype(np.uint8))
             #interpreter.set_tensor(input_details[0]['index'], predict_x.astype(np.float32))
-            #input_details = interpreter.get_input_details()[0] # for one input data
-            #tensor_index = input_details['index'] # tensor index in the interpreter
-            #input_tensor = interpreter.tensor(tensor_index)()[0]
-            #input_tensor[:, :] = predict_x
             now = datetime.now(pytz.timezone('Asia/Singapore'))
             start_time = now.replace(tzinfo=None) # remove time zone information
             #print(str(start_time))
