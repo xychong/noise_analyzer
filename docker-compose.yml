@@ -5,6 +5,7 @@ services:
   recorder:
     restart: always
     build: ./recorder
+    privileged: true
     volumes:
       - 'shared-data:/data/sound_app'
   classifier:
