@@ -13,8 +13,9 @@ app.set("views", __dirname + "/views");
 let wav_path = env.WAV_PATH || "/data/sound_app/";
 let db_name = env.DB_PATH || "/data/sound_app/sound_app.db";
 var label_file = env.LABEL_FILE || "/data/sound_app/class_labels.txt";
-var master_node = env.MASTER_NODE || "unknown";
+var master_node = env.MASTER_NODE || "unknown"; // MASTER
 
+// MASTER
 let minio_access_key = env.MINIO_ACCESS_KEY;
 let minio_secret_key = env.MINIO_SECRET_KEY;
 let uuid = env.RESIN_DEVICE_UUID;
@@ -30,6 +31,7 @@ var form_errors = "NA";
 var Minio = require('minio')
 var upload_enabled = "OK";
 
+// MASTER
 if (!minio_access_key || !minio_secret_key) {
   upload_enabled = "No Minio credentials set";
 } else {
@@ -90,7 +92,7 @@ function cb_readyCount(rowcount) {
   ready_rows = rowcount;
 }
 
-
+// MASTER
 async function doUpload() {
   return new Promise( async (resolve, reject) => {
     let row_id = 0;
@@ -125,7 +127,7 @@ async function doUpload() {
   });  // end promise
 }
 
-
+// MASTER
 async function doUploadTasks(row) {
 
   var filename = "";
@@ -427,7 +429,7 @@ app.post('/', async (req, res, next) => {
     }
   } else {
     // Upload form posted
-    frmErr = await doUpload()
+    // frmErr = await doUpload()
     //console.log("moving on...");
   }
 
