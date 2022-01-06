@@ -52,7 +52,7 @@ def extract_features_only(filename):
 try:
     interpreter = tflite.Interpreter(model_path=MODEL_FILE, experimental_delegates=[tflite.load_delegate('libedgetpu.so.1')])
 except ValueError:
-    print("Interpreter error. Is Edge TPU plugged in?")
+    print("Interpreter error. Is Edge TPU plugged in?") # occurs when i don't run the container as privileged
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 interpreter.allocate_tensors()
