@@ -18,8 +18,10 @@ RUN \
     imx-gpu-viv \
     weston-imx \
     pulseaudio-utils=12.2-4+deb10u1 \
-    libpulse0=12.2-4+deb10u1 libpulsedsp=12.2-4+deb10u1 \
-    pulseaudio=12.2-4+deb10u1 imx-board-audio=5-1 \
+    libpulse0=12.2-4+deb10u1 \
+    libpulsedsp=12.2-4+deb10u1 \
+    pulseaudio=12.2-4+deb10u1 \
+    imx-board-audio=5-1 \
     alsa-utils=1.1.8-2 \
     python3-tz \
     python3-pyaudio

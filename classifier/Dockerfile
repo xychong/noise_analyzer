@@ -20,9 +20,11 @@ RUN \
     libedgetpu1-std \
     imx-gpu-viv \
     weston-imx \
-    libpulse0=12.2-4+deb10u1 libpulsedsp=12.2-4+deb10u1 \
+    libpulse0=12.2-4+deb10u1 \
+    libpulsedsp=12.2-4+deb10u1 \
     pulseaudio-utils=12.2-4+deb10u1 \
-    pulseaudio=12.2-4+deb10u1 imx-board-audio=5-1 \
+    pulseaudio=12.2-4+deb10u1 \
+    imx-board-audio=5-1 \
     alsa-utils=1.1.8-2 \
     sqlite3
 
