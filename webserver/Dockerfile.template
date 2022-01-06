@@ -21,7 +21,7 @@ RUN JOBS=MAX npm install --production --unsafe-perm && npm cache verify && rm -r
 COPY . ./
 
 # Enable udevd so that plugged dynamic hardware devices show up in our container.
-ENV UDEV=1
+#ENV UDEV=1
 
 # script will run server.js
 CMD ["bash","start.sh"]
