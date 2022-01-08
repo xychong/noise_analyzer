@@ -10,7 +10,7 @@ assets:
   logo:
     type: "blob.asset"
     data:
-      url: "https://raw.githubusercontent.com/balenalabs-incubator/coral-audio-analysis/master/logo.png"
+      url: "https://github.com/xychong/noise_analyzer/blob/master/logo.png?raw=true" 
 data:
   applicationEnvironmentVariables:
     - WAV_REC_THRESHOLD: 2000
