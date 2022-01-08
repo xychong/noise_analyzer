@@ -10,7 +10,7 @@ assets:
   logo:
     type: "blob.asset"
     data:
-      url: "https://raw.githubusercontent.com/xychong/noise_analyzer/master/logo.png?token=GHSAT0AAAAAABNBGYTLPKVFI52NIHNM4UIKYOZEDKQ" 
+      url: "https://raw.githubusercontent.com/xychong/noise_analyzer/master/logo.png" 
 data:
   applicationEnvironmentVariables:
     - WAV_REC_THRESHOLD: 2000
