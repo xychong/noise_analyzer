@@ -1,10 +1,41 @@
 <%- include("_header") -%>
 
-<!-- Upload Modal 1 -->
+<!-- Delete Modal -->
 <div id="id01" class="w3-modal">
   <div class="w3-modal-content w3-card-4 w3-animate-top">
-    <header class="w3-container w3-theme-l1"> 
+    <header class="w3-container w3-theme-l1">
       <span onclick="document.getElementById('id01').style.display='none'"
+        class="w3-button w3-display-topright">×</span>
+      <h4>Confirm delete audio file</h4>
+    </header>
+  <form method="post" class="w3-container w3-card-4">
+    <div class="w3-section">
+      <h3>Are you sure?</h3>
+    </div>
+
+  <div class="w3-row">
+  <div class="w3-half">
+    <input type="hidden" name="hidFormName" value="id01">
+    <input type="hidden" name="hidWavID2" value="0" id="hidWavID2">
+    <input type="hidden" name="hidWavFile" value="0" id="hidWavFile"> 
+   <br><br>
+    <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Delete</button>
+    <br><br>
+  </div>
+
+<div class="w3-half">
+  &nbsp;
+  </div>
+  </div>
+</form>
+</div>
+</div>
+
+<!-- Upload Modal 1 -->
+<div id="id02" class="w3-modal">
+  <div class="w3-modal-content w3-card-4 w3-animate-top">
+    <header class="w3-container w3-theme-l1"> 
+      <span onclick="document.getElementById('id02').style.display='none'"
         class="w3-button w3-display-topright">×</span>
       <h4>Tag file for upload</h4>    
     </header>
@@ -17,7 +48,7 @@
         <% } %>
         
       </select>
-      <input type="hidden" name="hidFormName" value="id01">
+      <input type="hidden" name="hidFormName" value="id02">
       <input type="hidden" name="hidWavID1" value="0" id="hidWavID1">     
     </div>  
     <div class="w3-section">      
@@ -38,37 +69,6 @@
   </div>
 
   <div class="w3-half">
-  &nbsp;
-  </div>
-  </div>
-</form>
-</div>
-</div>
-
-<!-- Delete Modal -->
-<div id="id02" class="w3-modal">
-  <div class="w3-modal-content w3-card-4 w3-animate-top">
-    <header class="w3-container w3-theme-l1">
-      <span onclick="document.getElementById('id02').style.display='none'"
-        class="w3-button w3-display-topright">×</span>
-      <h4>Confirm delete audio file</h4>
-    </header>
-  <form method="post" class="w3-container w3-card-4">
-    <div class="w3-section">
-      <h3>Are you sure?</h3>
-    </div>
-
-  <div class="w3-row">
-  <div class="w3-half">
-    <input type="hidden" name="hidFormName" value="id02">
-    <input type="hidden" name="hidWavID2" value="0" id="hidWavID2">
-    <input type="hidden" name="hidWavFile" value="0" id="hidWavFile"> 
-   <br><br>
-    <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Delete</button>
-    <br><br>
-  </div>
-
-<div class="w3-half">
   &nbsp;
   </div>
   </div>
