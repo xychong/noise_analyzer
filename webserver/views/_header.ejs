@@ -53,13 +53,13 @@ function formSubmit(radioObj){
 function modalShow(formID, wavID, cname, fname) {
   
   document.getElementById("hidWavID1").value = wavID;
-  document.getElementById("hidWavID2").value = wavID;
+  // document.getElementById("hidWavID2").value = wavID;
   if (formID == "id01") {
-    // Upload modal
-    //document.getElementById("predictClass").value = cname;
-  }  else {
     // Delete modal
     document.getElementById("hidWavFile").value = fname;
+  }  else {
+    // Upload modal
+    //document.getElementById("predictClass").value = cname;
   }
   if (formID == "id03") {
     // ignore if upload disabled
@@ -84,7 +84,7 @@ function modalShow(formID, wavID, cname, fname) {
 
 window.onload = function() {
 
-  setTimeout(refreshTable, 10000);
+  setTimeout(refreshTable, 5000);
          
 }
 
