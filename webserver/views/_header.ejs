@@ -61,13 +61,13 @@ function modalShow(formID, wavID, cname, fname) {
     // Upload modal
     //document.getElementById("predictClass").value = cname;
   }
-  if (formID == "id03") {
-    // ignore if upload disabled
-    //window.alert(document.getElementById("btnUploadAll").style.boxShadow)
-    if (document.getElementById("btnUploadAll").style.boxShadow == "rgb(136, 136, 136) 0px 0px 0px" ) {
-      return;
-    }
-  }
+  // if (formID == "id03") {
+  //   // ignore if upload disabled
+  //   //window.alert(document.getElementById("btnUploadAll").style.boxShadow)
+  //   if (document.getElementById("btnUploadAll").style.boxShadow == "rgb(136, 136, 136) 0px 0px 0px" ) {
+  //     return;
+  //   }
+  // }
   document.getElementById(formID).style.display='block';
 }
 
@@ -84,7 +84,7 @@ function modalShow(formID, wavID, cname, fname) {
 
 window.onload = function() {
 
-  setTimeout(refreshTable, 5000);
+  setTimeout(refreshTable, 1000);
          
 }
 
