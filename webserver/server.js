@@ -409,7 +409,7 @@ app.post('/', async (req, res, next) => {
   if (req.body.hidFormName == "id01") {
     // delete file form posted
     // update db
-    sql = sql + "timestamp_deleted = datetime('now'), current_status = 'deleted' WHERE (my_rowid = " + req.body.hidWavID2 + ")";
+    sql = sql + "timestamp_deleted = datetime('now'), current_status = 'deleted' WHERE (my_rowid = " + req.body.hidWavID1 + ")";
     //console.log("Delete SQL: ", sql);
     db.run(sql, err => {
       if (err) {
