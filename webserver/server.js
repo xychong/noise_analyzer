@@ -245,7 +245,7 @@ async function buildTableHTML(row) {
     my_table = my_table + "</td><td style='vertical-align: middle;'>"
 
     if (row.current_status != "deleted" && row.current_status != "uploaded" || row.current_status == "evaluated") {
-      my_table = my_table + "<a class='w3-button w3-circle w3-small w3-red' onclick=\"modalShow('id01'," + row.my_rowid + ", '" +  row.interpreter_class_id + "', '" + row.filename + "')\"><i class='fa fa-trash'></i></a> &nbsp;&nbsp;"
+      my_table = my_table + "<a class='w3-button w3-circle w3-small w3-red' onclick=\"modalShow('id02'," + row.my_rowid + ", '" +  row.interpreter_class_id + "', '" + row.filename + "')\"><i class='fa fa-trash'></i></a> &nbsp;&nbsp;"
     }
 
     // if (row.current_status == "evaluated") {
@@ -406,10 +406,10 @@ app.post('/', async (req, res, next) => {
   //   }  // end else blank description
 
   // } 
-  if (req.body.hidFormName == "id01") {
+  if (req.body.hidFormName == "id02") {
     // delete file form posted
     // update db
-    sql = sql + "timestamp_deleted = datetime('now'), current_status = 'deleted' WHERE (my_rowid = " + req.body.hidWavID1 + ")";
+    sql = sql + "timestamp_deleted = datetime('now'), current_status = 'deleted' WHERE (my_rowid = " + req.body.hidWavID2 + ")";
     //console.log("Delete SQL: ", sql);
     db.run(sql, err => {
       if (err) {
