@@ -238,13 +238,13 @@ async function buildTableHTML(row) {
 
     my_table = my_table + "</td><td style='vertical-align: bottom;'>"
 
-    if (row.current_status != "deleted" && row.current_status != "uploaded") {
+    if (row.current_status != "deleted") {
       my_table = my_table + "<audio controls><source src='/public/" + row.filename + "'></audio> &nbsp;"
     }
 
     my_table = my_table + "</td><td style='vertical-align: middle;'>"
 
-    if (row.current_status != "deleted" && row.current_status != "uploaded" || row.current_status == "evaluated") {
+    if (row.current_status != "deleted" || row.current_status == "evaluated") {
       my_table = my_table + "<a class='w3-button w3-circle w3-small w3-red' onclick=\"modalShow('id01'," + row.my_rowid + ", '" +  row.interpreter_class_id + "', '" + row.filename + "')\"><i class='fa fa-trash'></i></a> &nbsp;&nbsp;"
     }
 
@@ -322,11 +322,11 @@ function getSQL(filter, srtid) {
       sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'ready' OR current_status = 'created'";
       break;
     case "filter2":
-      sql = sql + " WHERE current_status = 'uploaded'";
-      break;
-    case "filter3":
       sql = sql + " WHERE current_status = 'deleted'";
       break;
+    // case "filter3":
+    //   sql = sql + " WHERE current_status = 'uploaded'";
+    //   break;
     default:
       sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'ready' OR current_status = 'created'";
   }
@@ -354,7 +354,7 @@ app.get('/', function (req, res) {
     if (err) {
       return console.error(err.message);
     }
-  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, readyCount: ready_rows, rm: "false", upload_enabled: upload_enabled, menuItems: menu });
+  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, readyCount: ready_rows, rm: "false", menuItems: menu });
   });
 });
 
@@ -440,7 +440,7 @@ app.post('/', async (req, res, next) => {
     if (err) {
       return console.error(err.message);
     }
-  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, readyCount: ready_rows, rm: "false", upload_enabled: upload_enabled, menuItems: menu });
+  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, readyCount: ready_rows, rm: "false", menuItems: menu });
   });
 });
 
