@@ -150,7 +150,19 @@
         <label>Deleted</label>
         <input id="hidSrt" type="hidden" name="srtid" value="<%= srtid %>">
       </form>
-
+    <!-- </td><td style="text-align:right;">
+      Files ready for upload: <%= readyCount %> <br />
+      <button id="btnUploadAll" 
+         <% if (readyCount == 0 || upload_enabled != 'OK') { %>
+           class="w3-button w3-blue w3-padding-large w3-small w3-margin-top w3-disabled" style="box-shadow: 0px 0px 0px #888888;"
+         <% } else { %> 
+           class="w3-button w3-blue w3-padding-large w3-small w3-margin-top" style="box-shadow: 1px 1px 1px #888888;"
+         <% } %>
+         onclick="modalShow('id03', 0, 0, 'none')">Upload</button>
+         <% if (upload_enabled != 'OK') { %>
+           <br><span style="font-size:75%;color:#993300">(<%= upload_enabled %>)</span>
+         <% } %>
+    </td></tr></table> -->
 
     <br><br>
 
