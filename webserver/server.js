@@ -13,6 +13,9 @@ app.set("views", __dirname + "/views");
 let wav_path = env.WAV_PATH || "/data/sound_app/";
 let db_name = env.DB_PATH || "/data/sound_app/sound_app.db";
 var label_file = env.LABEL_FILE || "/data/sound_app/class_labels.txt";
+
+var ready_rows = 0;
+var table_rows = 0;
 //var master_node = env.MASTER_NODE || "unknown"; // MASTER
 
 // MASTER
@@ -25,8 +28,6 @@ var label_file = env.LABEL_FILE || "/data/sound_app/class_labels.txt";
 // if (menu_items) {
 //   menu = JSON.parse("[" + string.split() + "]");
 // }
-var ready_rows = 0;
-var table_rows = 0;
 //var form_errors = "NA";
 //var Minio = require('minio')
 //var upload_enabled = "OK";
@@ -65,32 +66,34 @@ app.use(express.urlencoded({ extended: true}))
 // Read in label file
 var labels = [];
 try {
+  // read file in synchronous way
+  // forEach() calls a function for each element in an array
   fs.readFileSync(label_file).toString().split("\n").forEach(function(line, index, arr) {
-    if (index === arr.length - 1 && line === "") { return; }
+    if (index === arr.length - 1 && line === "") { return; } // nothing to read anymore
     labels.push(line);
   });
 } catch (error) {
-  console.log("Error reading label file: ", error);
-  //upload_enabled = "No label file";
+  console.log("Error reading label file: ", error); // display runtime error message 
 }
 console.log("Read in", labels.length, "labels:");
 console.log(labels);
 
-function getReadyCount(uid, callback){
-  var query = "SELECT filename FROM wav_file WHERE current_status = 'ready'";
-  db.all(query, function (err, rows) {
-    if(err){
-        console.log(err);
-    }else{
-        callback(rows.length);
-    }
-  });
-}
 
-function cb_readyCount(rowcount) {
-  //console.log("print:",rowcount);
-  ready_rows = rowcount;
-}
+// function getReadyCount(uid, callback){
+//   var query = "SELECT filename FROM wav_file WHERE current_status = 'ready'";
+//   db.all(query, function (err, rows) {
+//     if(err){
+//         console.log(err); // stores error detail
+//     }else{
+//         callback(rows.length);
+//     }
+//   });
+// }
+
+// function cb_readyCount(rowcount) {
+//   //console.log("print:",rowcount);
+//   ready_rows = rowcount;
+// }
 
 // MASTER
 // async function doUpload() {
@@ -319,7 +322,7 @@ function getSQL(filter, srtid) {
 
   switch (filter) {
     case "filter1":
-      sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'ready' OR current_status = 'created'";
+      sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'created'";
       break;
     case "filter2":
         sql = sql + " WHERE current_status = 'uploaded'";
@@ -328,7 +331,7 @@ function getSQL(filter, srtid) {
       sql = sql + " WHERE current_status = 'deleted'";
       break;
     default:
-      sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'ready' OR current_status = 'created'";
+      sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'created'";
   }
   switch (srtid) {
     case "1":
@@ -347,16 +350,16 @@ function getSQL(filter, srtid) {
 }
 
 // reply to home page request
-app.get('/', function (req, res) {
-  getReadyCount(0, cb_readyCount);
-  //console.log("GETSQL for home page render: ",  getSQL(req.query.filter, req.query.srtid));
-  db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
-    if (err) {
-      return console.error(err.message);
-    }
-  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, readyCount: ready_rows, rm: "false"});
-  });
-});
+// app.get('/', function (req, res) {
+//   getReadyCount(0, cb_readyCount);
+//   //console.log("GETSQL for home page render: ",  getSQL(req.query.filter, req.query.srtid));
+//   db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
+//     if (err) {
+//       return console.error(err.message);
+//     }
+//   res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, readyCount: ready_rows, rm: "false"});
+//   });
+// });
 
 // reply to table request for AJAX calls
 app.get('/table', async function (req, res) {
@@ -434,14 +437,14 @@ app.post('/', async (req, res, next) => {
     //console.log("moving on...");
   }
 
-  getReadyCount(0, cb_readyCount);
-  //console.log("GETSQL for home page render after POST: ",  getSQL(req.query.filter, req.query.srtid));
-  db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
-    if (err) {
-      return console.error(err.message);
-    }
-  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, readyCount: ready_rows, rm: "false"});
-  });
+  // getReadyCount(0, cb_readyCount);
+  // //console.log("GETSQL for home page render after POST: ",  getSQL(req.query.filter, req.query.srtid));
+  // db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
+  //   if (err) {
+  //     return console.error(err.message);
+  //   }
+  // res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, readyCount: ready_rows, rm: "false"});
+  // });
 });
 
 // SQLite database connection
