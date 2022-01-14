@@ -78,7 +78,7 @@ try {
 console.log("Read in", labels.length, "labels:");
 console.log(labels);
 
-
+// get number of files marked as ready
 // function getReadyCount(uid, callback){
 //   var query = "SELECT filename FROM wav_file WHERE current_status = 'ready'";
 //   db.all(query, function (err, rows) {
@@ -350,16 +350,16 @@ function getSQL(filter, srtid) {
 }
 
 // reply to home page request
-// app.get('/', function (req, res) {
-//   getReadyCount(0, cb_readyCount);
-//   //console.log("GETSQL for home page render: ",  getSQL(req.query.filter, req.query.srtid));
-//   db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
-//     if (err) {
-//       return console.error(err.message);
-//     }
-//   res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, readyCount: ready_rows, rm: "false"});
-//   });
-// });
+app.get('/', function (req, res) {
+  //getReadyCount(0, cb_readyCount);
+  //console.log("GETSQL for home page render: ",  getSQL(req.query.filter, req.query.srtid));
+  db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
+    if (err) {
+      return console.error(err.message);
+    }
+  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, readyCount: ready_rows, rm: "false"});
+  });
+});
 
 // reply to table request for AJAX calls
 app.get('/table', async function (req, res) {
@@ -437,14 +437,14 @@ app.post('/', async (req, res, next) => {
     //console.log("moving on...");
   }
 
-  // getReadyCount(0, cb_readyCount);
-  // //console.log("GETSQL for home page render after POST: ",  getSQL(req.query.filter, req.query.srtid));
-  // db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
-  //   if (err) {
-  //     return console.error(err.message);
-  //   }
-  // res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, readyCount: ready_rows, rm: "false"});
-  // });
+  //getReadyCount(0, cb_readyCount);
+  //console.log("GETSQL for home page render after POST: ",  getSQL(req.query.filter, req.query.srtid));
+  db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
+    if (err) {
+      return console.error(err.message);
+    }
+  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, readyCount: ready_rows, rm: "false"});
+  });
 });
 
 // SQLite database connection
