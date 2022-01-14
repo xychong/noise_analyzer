@@ -13,23 +13,23 @@ app.set("views", __dirname + "/views");
 let wav_path = env.WAV_PATH || "/data/sound_app/";
 let db_name = env.DB_PATH || "/data/sound_app/sound_app.db";
 var label_file = env.LABEL_FILE || "/data/sound_app/class_labels.txt";
-var master_node = env.MASTER_NODE || "unknown"; // MASTER
+//var master_node = env.MASTER_NODE || "unknown"; // MASTER
 
 // MASTER
-let minio_access_key = env.MINIO_ACCESS_KEY;
-let minio_secret_key = env.MINIO_SECRET_KEY;
-let uuid = env.RESIN_DEVICE_UUID;
-let short_uuid = uuid.substring(0, 8);
-let menu = [ short_uuid, '#', 'Master', `https://${master_node}.balena-devices.com` ];
-let menu_items = env.MENU_ITEMS;
-if (menu_items) {
-  menu = JSON.parse("[" + string.split() + "]");
-}
+// let minio_access_key = env.MINIO_ACCESS_KEY;
+// let minio_secret_key = env.MINIO_SECRET_KEY;
+// let uuid = env.RESIN_DEVICE_UUID;
+// let short_uuid = uuid.substring(0, 8);
+//let menu = [ short_uuid, '#', 'Master', `https://${master_node}.balena-devices.com` ];
+// let menu_items = env.MENU_ITEMS;
+// if (menu_items) {
+//   menu = JSON.parse("[" + string.split() + "]");
+// }
 var ready_rows = 0;
 var table_rows = 0;
-var form_errors = "NA";
-var Minio = require('minio')
-var upload_enabled = "OK";
+//var form_errors = "NA";
+//var Minio = require('minio')
+//var upload_enabled = "OK";
 
 // MASTER
 // if (!minio_access_key || !minio_secret_key) {
@@ -354,7 +354,7 @@ app.get('/', function (req, res) {
     if (err) {
       return console.error(err.message);
     }
-  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, readyCount: ready_rows, rm: "false", menuItems: menu });
+  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, readyCount: ready_rows, rm: "false"});
   });
 });
 
@@ -440,7 +440,7 @@ app.post('/', async (req, res, next) => {
     if (err) {
       return console.error(err.message);
     }
-  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, readyCount: ready_rows, rm: "false", menuItems: menu });
+  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, readyCount: ready_rows, rm: "false"});
   });
 });
 
