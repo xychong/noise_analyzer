@@ -220,6 +220,7 @@ function getSQL(filter, srtid) {
   return sql;
 }
 
+// Adding row to entire table
 async function buildTable(req) {
   return new Promise( async (resolve, reject) => {
     let my_table = "";
@@ -241,6 +242,7 @@ async function buildTable(req) {
   });  // end promise
 }
 
+// Creation of one row
 function buildTableHTML(row) {
   return new Promise(resolve => {
 
@@ -296,7 +298,7 @@ function buildTableHTML(row) {
 }
 
 async function buildExport(req) {
-  return new Promise( async (resolve, reject) => {
+  return new Promise( async resolve => {
     let my_table = "";
     let row_html = "";
     let sql = "SELECT * FROM wav_file";
@@ -321,8 +323,8 @@ async function buildExport(req) {
   });  // end promise
 }
 
-async function buildExportJSON(row) {
-  return new Promise(async (resolve, reject) => {
+function buildExportJSON(row) {
+  return new Promise(resolve => {
 
     let my_table = "{";
     my_table = my_table + '"my_rowid": "' + row.my_rowid + '",'
@@ -349,6 +351,8 @@ async function buildExportJSON(row) {
     resolve(my_table);
     });
 }
+
+// --------------
 
 // reply to home page request
 app.get('/', function (req, res) {
