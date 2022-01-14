@@ -187,16 +187,50 @@ console.log(labels);
 
 // }
 
+function getSQL(filter, srtid) {
+
+  var sql = "SELECT my_rowid, timestamp_created, interpreter_class, interpreter_class_id, interpreter_class2, interpreter_certainty, interpreter_certainty2, current_status, filename, threshold FROM wav_file";
+
+  switch (filter) {
+    case "filter1":
+      sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'created'";
+      break;
+    case "filter2":
+        sql = sql + " WHERE current_status = 'uploaded'";
+        break;
+    case "filter3":
+      sql = sql + " WHERE current_status = 'deleted'";
+      break;
+    default:
+      sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'created'";
+  }
+  switch (srtid) {
+    case "1":
+      sql = sql + " ORDER BY timestamp_created DESC";
+      break;
+    case "2":
+      sql = sql + " ORDER BY current_status";
+      break;
+    case "3":
+      sql = sql + " ORDER BY interpreter_class";
+      break;
+    default:
+      sql = sql + " ORDER BY timestamp_created DESC";
+  }
+  return sql;
+}
+
 async function buildTable(req) {
   return new Promise( async (resolve, reject) => {
     let my_table = "";
     let row_html = "";
+    // query all rows
     db.all(getSQL(req.query.filter, req.query.srtid), [], async (err,rows) => {
       //console.log("buildTable SQL: ", getSQL(req.query.filter, req.query.srtid));
       if (err) {
-        return console.error(err.message);
+        return console.error(err.message); // write error message to console
       }
-      table_rows = rows.length;
+      table_rows = rows.length; // number of files queried
       for (const row of rows) {
         row_html = await buildTableHTML(row); // function execution is paused until Promise is settled
         my_table = my_table + row_html
@@ -207,8 +241,8 @@ async function buildTable(req) {
   });  // end promise
 }
 
-async function buildTableHTML(row) {
-  return new Promise(async (resolve, reject) => {
+function buildTableHTML(row) {
+  return new Promise((resolve, reject) => {
 
     let my_table = "";
     my_table = my_table + "<tr>" +
@@ -314,39 +348,6 @@ async function buildExportJSON(row) {
 
     resolve(my_table);
     });
-}
-
-function getSQL(filter, srtid) {
-
-  var sql = "SELECT my_rowid, timestamp_created, interpreter_class, interpreter_class_id, interpreter_class2, interpreter_certainty, interpreter_certainty2, current_status, filename, threshold FROM wav_file";
-
-  switch (filter) {
-    case "filter1":
-      sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'created'";
-      break;
-    case "filter2":
-        sql = sql + " WHERE current_status = 'uploaded'";
-        break;
-    case "filter3":
-      sql = sql + " WHERE current_status = 'deleted'";
-      break;
-    default:
-      sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'created'";
-  }
-  switch (srtid) {
-    case "1":
-      sql = sql + " ORDER BY timestamp_created DESC";
-      break;
-    case "2":
-      sql = sql + " ORDER BY current_status";
-      break;
-    case "3":
-      sql = sql + " ORDER BY interpreter_class";
-      break;
-    default:
-      sql = sql + " ORDER BY timestamp_created DESC";
-  }
-  return sql;
 }
 
 // reply to home page request
