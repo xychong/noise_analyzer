@@ -31,83 +31,6 @@
 </div>
 </div>
 
-<!-- Upload Modal 1 -->
-<!-- <div id="id02" class="w3-modal">
-  <div class="w3-modal-content w3-card-4 w3-animate-top">
-    <header class="w3-container w3-theme-l1"> 
-      <span onclick="document.getElementById('id02').style.display='none'"
-        class="w3-button w3-display-topright">×</span>
-      <h4>Tag file for upload</h4>    
-    </header>
-  <form method="post" class="w3-container w3-card-4">
-    <div class="w3-section">
-      <label>Select Class: </label>
-      <select name="predictClass" id="predictClass">
-        <% for(let i = 0; i < labels.length; i++) { %>
-        <option value="<%= i %>"><%= labels[i] %></option>
-        <% } %>
-        
-      </select>
-      <input type="hidden" name="hidFormName" value="id02">
-      <input type="hidden" name="hidWavID2" value="0" id="hidWavID2">     
-    </div>  
-    <div class="w3-section">      
-      <input class="w3-input" type="text" name="txtDescription">
-      <label>Description</label>
-    </div>
-  <div class="w3-section">      
-    <input class="w3-input" type="text" name="txtNotes">
-    <label>Notes</label>
-  </div>
-
-  <div class="w3-row">
-  <div class="w3-half">
-    
-    <br><br>
-    <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Submit</button>
-    <br><br>
-  </div>
-
-  <div class="w3-half">
-  &nbsp;
-  </div>
-  </div>
-</form>
-</div>
-</div> -->
-
-<!-- Upload Modal 2 -->
-<!-- <div id="id03" class="w3-modal">
-  <div class="w3-modal-content w3-card-4 w3-animate-top">
-    <header class="w3-container w3-theme-l1">
-      <span onclick="document.getElementById('id03').style.display='none'"
-        class="w3-button w3-display-topright">×</span>
-      <h4>Confirm upload files</h4>
-    </header>
-  <form method="post" onsubmit="return uploading()" class="w3-container w3-card-4">
-    <div class="w3-section">
-      <h3><span id="sp03">Are you sure you want to upload the <%= readyCount %> file(s) marked as ready?</span></h3>
-    </div>
-  <div class="w3-row">
-    
-  <div class="w3-half">
-    <img src="rotator.gif" id="img03" style="visibility:hidden;">
-    <input type="hidden" name="hidFormName" value="id03">
-    <input type="hidden" name="hidWavID2" value="0" id="hidWavID2">
-    <input type="hidden" name="hidWavFile" value="0" id="hidWavFile">
-   <br><br>
-    <button class="w3-button w3-blue w3-padding-large w3-large w3-margin-top" id="bt03">Upload</button>
-    <br><br>
-  </div>
-
-<div class="w3-half">
-  &nbsp;
-  </div>
-  </div>
-</form>
-</div>
-</div> -->
-
 <!-- Info Modal -->
 <div id="id04" class="w3-modal">
   <div class="w3-modal-content w3-card-4 w3-animate-top">
@@ -186,7 +109,7 @@
                 </td>
                 <td style="vertical-align: middle;">
                 <% if (wav.current_status != "deleted" || wav.current_status == "evaluated") { %>
-                  <a class="w3-button w3-circle w3-small w3-red" onclick="modalShow('id01',<%= wav.my_rowid %>, '<%= wav.interpreter_class_id %>', '<%= wav.filename %>')"><i class="fa fa-trash"></i></a> &nbsp;
+                  <a class="w3-button w3-circle w3-small w3-red" onclick="modalShow('id01',<%= wav.my_rowid %>, '<%= wav.interpreter_class_id %>', '<%= wav.filename %>')"><i class="fa fa-trash"></i></a> &nbsp; 
                 <% } %>
                 <!-- <% if (wav.current_status == "evaluated") { %>
                   <a class="w3-button w3-circle w3-small w3-blue" onclick="modalShow('id01',<%= wav.my_rowid %>, '<%= wav.interpreter_class_id %>', '<%= wav.filename %>')"><i class="fa fa-cloud-upload"></i></a>
