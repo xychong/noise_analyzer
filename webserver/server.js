@@ -218,10 +218,10 @@ function getSQL(filter, srtid) {
 
 // Adding row to entire table
 async function buildTable(req) {
-  return new Promise( async (resolve, reject) => {
+  return new Promise( async resolve => {
     let my_table = "";
     let row_html = "";
-    // query all rows
+    // query all rows in database
     db.all(getSQL(req.query.filter, req.query.srtid), [], async (err,rows) => {
       //console.log("buildTable SQL: ", getSQL(req.query.filter, req.query.srtid));
       if (err) {
@@ -309,6 +309,7 @@ async function buildExport(req) {
       for (const row of rows) {
         row_html = await buildExportJSON(row);
         my_table = my_table + row_html // append each row of data
+        my_table = my_table + "\n"
         // console.log("table row: ", row.filename);
       }  // end for
       //my_table = my_table + "]  }"
@@ -341,7 +342,6 @@ function buildExportJSON(row) {
     // my_table = my_table + '"user_notes": "' + row.user_notes + '",'
 
     my_table = my_table + "}"  
-    my_table = my_table + "\n"
 
     resolve(my_table);
     });
