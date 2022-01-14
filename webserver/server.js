@@ -242,7 +242,7 @@ async function buildTable(req) {
 }
 
 function buildTableHTML(row) {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
 
     let my_table = "";
     my_table = my_table + "<tr>" +
