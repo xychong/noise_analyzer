@@ -14,7 +14,6 @@ let wav_path = env.WAV_PATH || "/data/sound_app/";
 let db_name = env.DB_PATH || "/data/sound_app/sound_app.db";
 var label_file = env.LABEL_FILE || "/data/sound_app/class_labels.txt";
 
-var ready_rows = 0;
 var table_rows = 0;
 //var master_node = env.MASTER_NODE || "unknown"; // MASTER
 
@@ -357,7 +356,7 @@ app.get('/', function (req, res) {
     if (err) {
       return console.error(err.message);
     }
-  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, readyCount: ready_rows, rm: "false"});
+  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, rm: "false"});
   });
 });
 
@@ -443,7 +442,7 @@ app.post('/', async (req, res, next) => {
     if (err) {
       return console.error(err.message);
     }
-  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, readyCount: ready_rows, rm: "false"});
+  res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, rm: "false"});
   });
 });
 
