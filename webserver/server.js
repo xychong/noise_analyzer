@@ -195,9 +195,6 @@ function getSQL(filter, srtid) {
     case "filter1":
       sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'created'"; // All Recordings
       break;
-    // case "filter2":
-    //     sql = sql + " WHERE current_status = 'uploaded'";
-    //     break;
     case "filter2":
       sql = sql + " WHERE current_status = 'deleted'"; // Deleted
       break;
@@ -253,15 +250,11 @@ function buildTableHTML(row) {
     if (row.interpreter_class !== null) {
       my_table = my_table + row.interpreter_class;
     } else {
-      my_table = my_table + "&nbsp;";
+      my_table = my_table + "&nbsp;"; // non breaking space
     }
 
     if (row.interpreter_certainty !== null) {
-      if (row.interpreter_certainty >= row.threshold) {
-        my_table = my_table + "<span style='font-weight: bold;'> (" + row.interpreter_certainty + "%)</span>";
-      } else {
         my_table = my_table + " (" + row.interpreter_certainty + "%)";
-      }
     }
 
     my_table = my_table + "</td><td style='vertical-align: middle;'>";
@@ -275,7 +268,7 @@ function buildTableHTML(row) {
       my_table = my_table + " (" + row.interpreter_certainty2 + "%)"
     }
 
-    my_table = my_table + "</td><td style='vertical-align: bottom;'>"
+    // my_table = my_table + "</td><td style='vertical-align: bottom;'>"
 
     if (row.current_status != "deleted") {
       my_table = my_table + "<audio controls><source src='/public/" + row.filename + "'></audio> &nbsp;"
