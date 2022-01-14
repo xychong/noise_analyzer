@@ -340,7 +340,8 @@ function buildExportJSON(row) {
     // my_table = my_table + '"user_description": "' + row.user_description + '",'
     // my_table = my_table + '"user_notes": "' + row.user_notes + '",'
 
-    my_table = my_table + "}\n"
+    my_table = my_table + "}"  
+    my_table = my_table + "\n"
 
     resolve(my_table);
     });
