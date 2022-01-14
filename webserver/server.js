@@ -295,24 +295,24 @@ async function buildExport(req) {
     let my_table = "";
     let row_html = "";
     let sql = "SELECT * FROM wav_file";
-    console.log("start id (outside bracket): ", req.query.startid);
-    if (req.query.startid) {
-      console.log("start id (inside bracket): ", req.query.startid);
-      sql = sql + " WHERE my_rowid >= " + req.query.startid; // ??
-    }
+    // console.log("start id (outside bracket): ", req.query.startid);
+    // if (req.query.startid) {
+    //   console.log("start id (inside bracket): ", req.query.startid);
+    //   sql = sql + " WHERE my_rowid >= " + req.query.startid; // ??
+    // }
     sql = sql + " ORDER BY my_rowid";
     db.all(sql, [], async (err,rows) => {
       console.log("buildExport SQL: ", sql);
       if (err) {
         return console.error(err.message); // write error message to console
       }
-      my_table = `{  "files": [`
+      //my_table = `{  "files": [`
       for (const row of rows) {
         row_html = await buildExportJSON(row);
-        my_table = my_table + row_html
+        my_table = my_table + row_html // append each row of data
         // console.log("table row: ", row.filename);
       }  // end for
-      my_table = my_table + "]  }"
+      //my_table = my_table + "]  }"
     resolve(my_table);
     });  // end db
   });  // end promise
@@ -341,7 +341,7 @@ function buildExportJSON(row) {
     // my_table = my_table + '"user_description": "' + row.user_description + '",'
     // my_table = my_table + '"user_notes": "' + row.user_notes + '",'
 
-    my_table = my_table + "}"
+    my_table = my_table + "}\n"
 
     resolve(my_table);
     });
