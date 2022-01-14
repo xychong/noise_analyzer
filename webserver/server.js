@@ -295,8 +295,9 @@ async function buildExport(req) {
     let my_table = "";
     let row_html = "";
     let sql = "SELECT * FROM wav_file";
+    console.log("start id (outside bracket): ", req.query.startid);
     if (req.query.startid) {
-      console.log("start id: ", req.query.startid);
+      console.log("start id (inside bracket): ", req.query.startid);
       sql = sql + " WHERE my_rowid >= " + req.query.startid; // ??
     }
     sql = sql + " ORDER BY my_rowid";
@@ -332,7 +333,7 @@ function buildExportJSON(row) {
     my_table = my_table + '"interpreter_class_id": "' + row.interpreter_class_id + '",'
     my_table = my_table + '"interpreter_class2_id": "' + row.interpreter_class2_id + '",'
     my_table = my_table + '"certainty_threshold": "' + row.certainty_threshold + '",'
-    my_table = my_table + '"classify_duration": "' + row.classify_duration + '",'
+    my_table = my_table + '"classify_duration": "' + row.classify_duration 
     // my_table = my_table + '"timestamp_uploaded": "' + row.timestamp_uploaded + '",'
     // my_table = my_table + '"remote_filename": "' + row.remote_filename + '",'
     // my_table = my_table + '"user_class": "' + row.user_class + '",'
