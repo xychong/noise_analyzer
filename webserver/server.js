@@ -296,19 +296,19 @@ async function buildExport(req) {
     let row_html = "";
     let sql = "SELECT * FROM wav_file";
     if (req.query.startid) {
-      sql = sql + " WHERE my_rowid >= " + req.query.startid;
+      sql = sql + " WHERE my_rowid >= " + req.query.startid; // ??
     }
     sql = sql + " ORDER BY my_rowid";
     db.all(sql, [], async (err,rows) => {
       console.log("buildExport SQL: ", sql);
       if (err) {
-        return console.error(err.message);
+        return console.error(err.message); // write error message to console
       }
       my_table = `{  "files": [`
       for (const row of rows) {
         row_html = await buildExportJSON(row);
         my_table = my_table + row_html
-        console.log("table row: ", row.filename);
+        // console.log("table row: ", row.filename);
       }  // end for
       my_table = my_table + "]  }"
     resolve(my_table);
@@ -332,12 +332,12 @@ function buildExportJSON(row) {
     my_table = my_table + '"interpreter_class2_id": "' + row.interpreter_class2_id + '",'
     my_table = my_table + '"certainty_threshold": "' + row.certainty_threshold + '",'
     my_table = my_table + '"classify_duration": "' + row.classify_duration + '",'
-    my_table = my_table + '"timestamp_uploaded": "' + row.timestamp_uploaded + '",'
-    my_table = my_table + '"remote_filename": "' + row.remote_filename + '",'
-    my_table = my_table + '"user_class": "' + row.user_class + '",'
-    my_table = my_table + '"user_class_id": "' + row.user_class_id + '",'
-    my_table = my_table + '"user_description": "' + row.user_description + '",'
-    my_table = my_table + '"user_notes": "' + row.user_notes + '",'
+    // my_table = my_table + '"timestamp_uploaded": "' + row.timestamp_uploaded + '",'
+    // my_table = my_table + '"remote_filename": "' + row.remote_filename + '",'
+    // my_table = my_table + '"user_class": "' + row.user_class + '",'
+    // my_table = my_table + '"user_class_id": "' + row.user_class_id + '",'
+    // my_table = my_table + '"user_description": "' + row.user_description + '",'
+    // my_table = my_table + '"user_notes": "' + row.user_notes + '",'
 
     my_table = my_table + "}"
 
