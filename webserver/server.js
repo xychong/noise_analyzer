@@ -296,6 +296,7 @@ async function buildExport(req) {
     let row_html = "";
     let sql = "SELECT * FROM wav_file";
     if (req.query.startid) {
+      console.log("start id: ", req.query.startid);
       sql = sql + " WHERE my_rowid >= " + req.query.startid; // ??
     }
     sql = sql + " ORDER BY my_rowid";
