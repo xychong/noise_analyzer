@@ -268,10 +268,10 @@ function buildTableHTML(row) {
       my_table = my_table + " (" + row.interpreter_certainty2 + "%)"
     }
 
-    // my_table = my_table + "</td><td style='vertical-align: bottom;'>"
+    my_table = my_table + "</td><td style='vertical-align: middle;'>"
 
     if (row.current_status != "deleted") {
-      my_table = my_table + "<audio controls><source src='/public/" + row.filename + "'></audio> &nbsp;"
+      my_table = my_table + "<audio controls><source src='/public/" + row.filename + "'></audio> &nbsp;" // only can play sound if sound isn't deleted
     }
 
     my_table = my_table + "</td><td style='vertical-align: middle;'>"
