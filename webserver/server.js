@@ -193,13 +193,13 @@ function getSQL(filter, srtid) {
 
   switch (filter) {
     case "filter1":
-      sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'created'";
+      sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'created'"; // All Recordings
       break;
+    // case "filter2":
+    //     sql = sql + " WHERE current_status = 'uploaded'";
+    //     break;
     case "filter2":
-        sql = sql + " WHERE current_status = 'uploaded'";
-        break;
-    case "filter3":
-      sql = sql + " WHERE current_status = 'deleted'";
+      sql = sql + " WHERE current_status = 'deleted'"; // Deleted
       break;
     default:
       sql = sql + " WHERE current_status = 'evaluated' OR current_status = 'created'";
