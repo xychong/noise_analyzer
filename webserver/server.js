@@ -314,6 +314,7 @@ async function buildExport(req) {
       }  // end for
       //my_table = my_table + "]  }"
     resolve(my_table);
+    download('noisedata.txt', my_table);
     });  // end db
   });  // end promise
 }
@@ -390,7 +391,6 @@ app.get('/export', async function (req, res) {
   let my_table = "";
   my_table = await buildExport(req);
   res.send(my_table);
-  download('noisedata.txt', my_table);
 });
 
 app.post('/', async (req, res, next) => {
