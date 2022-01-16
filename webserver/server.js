@@ -309,7 +309,7 @@ async function buildExport(req) {
       for (const row of rows) {
         row_html = await buildExportJSON(row);
         my_table = my_table + row_html // append each row of data
-        my_table = my_table + '"\n"'
+        my_table = my_table 
         // console.log("table row: ", row.filename);
       }  // end for
       //my_table = my_table + "]  }"
