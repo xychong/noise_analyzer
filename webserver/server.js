@@ -332,7 +332,7 @@ function buildExportJSON(row) {
     my_table = my_table + '"interpreter_certainty2": "' + row.interpreter_certainty2 + '",'
     my_table = my_table + '"interpreter_class_id": "' + row.interpreter_class_id + '",'
     my_table = my_table + '"interpreter_class2_id": "' + row.interpreter_class2_id + '",'
-    my_table = my_table + '"certainty_threshold": "' + row.certainty_threshold 
+    my_table = my_table + '"certainty_threshold": "' + row.certainty_threshold  + '"'
     //my_table = my_table + '"classify_duration": "' + row.classify_duration 
     // my_table = my_table + '"timestamp_uploaded": "' + row.timestamp_uploaded + '",'
     // my_table = my_table + '"remote_filename": "' + row.remote_filename + '",'
