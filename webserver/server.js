@@ -309,7 +309,7 @@ async function buildExport(req) {
       for (const row of rows) {
         row_html = await buildExportJSON(row);
         my_table = my_table + row_html // append each row of data
-        my_table = my_table + "\n"
+        my_table = my_table + '"\n"'
         // console.log("table row: ", row.filename);
       }  // end for
       //my_table = my_table + "]  }"
@@ -332,8 +332,8 @@ function buildExportJSON(row) {
     my_table = my_table + '"interpreter_certainty2": "' + row.interpreter_certainty2 + '",'
     my_table = my_table + '"interpreter_class_id": "' + row.interpreter_class_id + '",'
     my_table = my_table + '"interpreter_class2_id": "' + row.interpreter_class2_id + '",'
-    my_table = my_table + '"certainty_threshold": "' + row.certainty_threshold + '",'
-    my_table = my_table + '"classify_duration": "' + row.classify_duration 
+    my_table = my_table + '"certainty_threshold": "' + row.certainty_threshold 
+    //my_table = my_table + '"classify_duration": "' + row.classify_duration 
     // my_table = my_table + '"timestamp_uploaded": "' + row.timestamp_uploaded + '",'
     // my_table = my_table + '"remote_filename": "' + row.remote_filename + '",'
     // my_table = my_table + '"user_class": "' + row.user_class + '",'
@@ -345,6 +345,19 @@ function buildExportJSON(row) {
 
     resolve(my_table);
     });
+}
+
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
 }
 
 // --------------
@@ -377,6 +390,7 @@ app.get('/export', async function (req, res) {
   let my_table = "";
   my_table = await buildExport(req);
   res.send(my_table);
+  download('noisedata.txt', my_table);
 });
 
 app.post('/', async (req, res, next) => {
