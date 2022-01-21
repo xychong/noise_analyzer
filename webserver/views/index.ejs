@@ -96,7 +96,9 @@
                     </td>
                 <td style="vertical-align: middle;">
                 
+                <% if (wav.current_status != "deleted") { %>
                   <audio controls><source src="/public/<%= wav.filename %>"></audio> &nbsp;
+                <% } %>
                 </td>
                 <td style="vertical-align: middle;">
                 <% if (wav.current_status != "deleted" || wav.current_status == "evaluated") { %>
