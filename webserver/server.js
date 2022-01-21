@@ -155,7 +155,7 @@ async function buildExport() {
     // }
     sql = sql + " ORDER BY my_rowid";
     db.all(sql, [], async (err,rows) => {
-      console.log("buildExport SQL: ", sql);
+      // console.log("buildExport SQL: ", sql);
       if (err) {
         return console.error(err.message); // write error message to console
       }
