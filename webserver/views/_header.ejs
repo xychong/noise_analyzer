@@ -46,7 +46,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 <script type="text/javascript">
 function formSubmit(radioObj){
   if(radioObj.checked){
-    document.getElementById("filForm").submit();
+    document.getElementById("filForm").submit(); // submits the form
   }
 }
 
@@ -84,7 +84,7 @@ function modalShow(formID, wavID, cname, fname) {
 
 window.onload = function() {
 
-  setTimeout(refreshTable, 1000); // initial page refresh
+  setTimeout(refreshTable, 10000); // initial page refresh
          
 }
 
@@ -92,12 +92,12 @@ function refreshTable() {
   var xhttp;
  
   xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      rt = this.responseText
-      document.getElementById("tblBody").innerHTML = rt.substring(6, rt.length);
-      document.getElementById("topTitle").innerHTML = "Sound Recordings (" + rt.substring(0, 6).trim() + ")";
-      setTimeout(refreshTable, 30000); // refresh every 10s subsequently
+  xhttp.onreadystatechange = function() {  // called when readyState attribute changes
+    if (this.readyState == 4 && this.status == 200) { // readyState == DONE && status == OK (entire content has been received)
+      rt = this.responseText // text received using XMLHttpRequest
+      document.getElementById("tblBody").innerHTML = rt.substring(6, rt.length); // table content
+      document.getElementById("topTitle").innerHTML = "Sound Recordings (" + rt.substring(0, 6).trim() + ")"; // first 6 characters of string is number of recordings
+      setTimeout(refreshTable, 30000); // refresh every 30s subsequently
     }
   }
   let querystring = window.location.search;
