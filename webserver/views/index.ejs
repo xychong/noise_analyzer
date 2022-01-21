@@ -87,9 +87,6 @@
                 <td style="vertical-align: middle;"><%= wav.interpreter_class %>&nbsp;
                     <% if (wav.interpreter_certainty) { %>
                       (<%= wav.interpreter_certainty %>%)
-                      <% if (wav.interpreter_certainty >= wav.threshold) { %>
-                        </span>
-                      <% } %>
                     <% } %>
                     </td>
                 <td style="vertical-align: middle;"><%= wav.interpreter_class2 %>&nbsp;
@@ -97,11 +94,9 @@
                       (<%= wav.interpreter_certainty2 %>%)
                     <% } %>
                     </td>
-                <td style="vertical-align: bottom;">
+                <td style="vertical-align: middle;">
                 
-                <% if (wav.current_status != "deleted") { %>
                   <audio controls><source src="/public/<%= wav.filename %>"></audio> &nbsp;
-                <% } %>
                 </td>
                 <td style="vertical-align: middle;">
                 <% if (wav.current_status != "deleted" || wav.current_status == "evaluated") { %>
@@ -113,7 +108,7 @@
                 </td>
                 </tr>
               <% } %>  
-        </tbody>
+        </tbody>  
         </table>
       
     
