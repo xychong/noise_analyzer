@@ -139,7 +139,7 @@ while True:
                     # Delete file
                     os.remove(WAV_PATH + row[1])
                 else:
-                    print("Top guess above threshold, updating database, auto-delete OFF.")
+                    print("Top guess below threshold, updating database, auto-delete OFF.")
                     #print(start_time)
                     sql = """UPDATE wav_file SET timestamp_evaluated='{0}',
                           interpreter_class='{1}',
