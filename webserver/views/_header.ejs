@@ -12,14 +12,12 @@
 body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
 .fa-anchor,.fa-coffee {font-size:200px}
-
 /* Tooltip container */
 .tooltip {
   position: relative;
   display: inline-block;
   border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
 }
-
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;
@@ -37,7 +35,6 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
   position: absolute;
   z-index: 1;
 }
-
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
   visibility: visible;
@@ -49,7 +46,6 @@ function formSubmit(radioObj){
     document.getElementById("filForm").submit(); // submits the form (All Recordings and Deleted)
   }
 }
-
 function modalShow(formID, wavID, fname) 
 {
   document.getElementById("hidWavID1").value = wavID; // set the value to be rowID
@@ -59,12 +55,10 @@ function modalShow(formID, wavID, fname)
   } 
   document.getElementById(formID).style.display='block'; // display the delete modal
 }
-
 window.onload = function() 
 {
   setTimeout(refreshTable, 1000); // initial page refresh      
 }
-
 function refreshTable() {
   var xhttp;
  
@@ -84,7 +78,6 @@ function refreshTable() {
   xhttp.open("GET", "table" + querystring, true);
   xhttp.send(); // sends request to server to obtain number of rows + table contents
 }
-
 </script>
 <body>
 

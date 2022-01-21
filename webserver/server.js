@@ -196,7 +196,7 @@ function buildExportJSON(row) {
 
 //---------
 // GET is used to request data from a specified resource
-// POST is used to send data to a server to create/update a resource
+// POST is used to send data to a server to create/update a
 
 // reply to home page request (response)
 app.get('/', function (req, res) {
@@ -209,7 +209,7 @@ app.get('/', function (req, res) {
     if (err) {
       return console.error(err.message);
     }
-  // rendering index.ejs page
+  // rendering index.ejs pages
   res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, rm: "false"});
   });
 });
@@ -236,10 +236,10 @@ app.get('/export', async function (req, res) {
 // update database and webserver after user deletes data at client side
 app.post('/', async (req, res) => {
   let frmErr = "NA";
-  //console.log('Form submitted: ', req.body);
-  let sql = "UPDATE wav_file SET "; // we are going to update record
 
-  // delete
+  //console.log('Form submitted: ', req.body);
+  let sql = "UPDATE wav_file SET ";
+
   if (req.body.hidFormName == "id01") {
     // delete file form posted
     // update db
@@ -267,8 +267,7 @@ app.post('/', async (req, res) => {
   //getReadyCount(0, cb_readyCount);
   //console.log("GETSQL for home page render after POST: ",  getSQL(req.query.filter, req.query.srtid));
   db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
-    if (err) 
-    {
+    if (err) {
       return console.error(err.message);
     }
   res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, rm: "false"});
