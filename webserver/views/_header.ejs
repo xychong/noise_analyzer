@@ -46,63 +46,43 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 <script type="text/javascript">
 function formSubmit(radioObj){
   if(radioObj.checked){
-    document.getElementById("filForm").submit(); // submits the form
+    document.getElementById("filForm").submit(); // submits the form (All Recordings and Deleted)
   }
 }
 
-function modalShow(formID, wavID, cname, fname) {
-  
-  document.getElementById("hidWavID1").value = wavID;
-  // document.getElementById("hidWavID2").value = wavID;
-  if (formID == "id01") {
-    // Delete modal
-    document.getElementById("hidWavFile").value = fname;
-  }  else {
-    // Upload modal
-    //document.getElementById("predictClass").value = cname;
-  }
-  // if (formID == "id03") {
-  //   // ignore if upload disabled
-  //   //window.alert(document.getElementById("btnUploadAll").style.boxShadow)
-  //   if (document.getElementById("btnUploadAll").style.boxShadow == "rgb(136, 136, 136) 0px 0px 0px" ) {
-  //     return;
-  //   }
-  // }
-  document.getElementById(formID).style.display='block';
+function modalShow(formID, wavID, fname) 
+{
+  document.getElementById("hidWavID1").value = wavID; // set the value to be rowID
+  if (formID == "id01") // Delete modal
+  {
+    document.getElementById("hidWavFile").value = fname; // set the value to be filename
+  } 
+  document.getElementById(formID).style.display='block'; // display the delete modal
 }
 
-// function uploading() {
-  
-//   document.getElementById("bt03").disabled = true;
-//   document.getElementById("sp03").innerHTML = "Uploading files, Please wait...";
-//   document.getElementById("img03").style.visibility = "visible";
-
-//   return true;
-
-
-// }
-
-window.onload = function() {
-
-  setTimeout(refreshTable, 1000); // initial page refresh
-         
+window.onload = function() 
+{
+  setTimeout(refreshTable, 1000); // initial page refresh      
 }
 
 function refreshTable() {
   var xhttp;
  
   xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {  // called when readyState attribute changes
-    if (this.readyState == 4 && this.status == 200) { // readyState == DONE && status == OK (entire content has been received)
+  xhttp.onreadystatechange = function() // called when readyState attribute changes
+  {  
+    if (this.readyState == 4 && this.status == 200) // readyState == DONE && status == OK (entire content has been received)
+    { 
       rt = this.responseText // text received using XMLHttpRequest
-      document.getElementById("tblBody").innerHTML = rt.substring(6, rt.length); // table content
-      document.getElementById("topTitle").innerHTML = "Sound Recordings (" + rt.substring(0, 6).trim() + ")"; // first 6 characters of string is number of recordings
+      // innerHTML : contents within html element
+      document.getElementById("tblBody").innerHTML = rt.substring(6, rt.length); // update table content
+      document.getElementById("topTitle").innerHTML = "Sound Recordings (" + rt.substring(0, 6).trim() + ")"; // update number of recordings
       setTimeout(refreshTable, 30000); // refresh every 30s subsequently
     }
   }
   let querystring = window.location.search;
   xhttp.open("GET", "table" + querystring, true);
-  xhttp.send();
+  xhttp.send(); // sends request to server to obtain number of rows + table contents
 }
 
 </script>

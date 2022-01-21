@@ -15,40 +15,6 @@ let db_name = env.DB_PATH || "/data/sound_app/sound_app.db";
 var label_file = env.LABEL_FILE || "/data/sound_app/class_labels.txt";
 
 var table_rows = 0;
-//var master_node = env.MASTER_NODE || "unknown"; // MASTER
-
-// MASTER
-// let minio_access_key = env.MINIO_ACCESS_KEY;
-// let minio_secret_key = env.MINIO_SECRET_KEY;
-// let uuid = env.RESIN_DEVICE_UUID;
-// let short_uuid = uuid.substring(0, 8);
-//let menu = [ short_uuid, '#', 'Master', `https://${master_node}.balena-devices.com` ];
-// let menu_items = env.MENU_ITEMS;
-// if (menu_items) {
-//   menu = JSON.parse("[" + string.split() + "]");
-// }
-//var form_errors = "NA";
-//var Minio = require('minio')
-//var upload_enabled = "OK";
-
-// MASTER
-// if (!minio_access_key || !minio_secret_key) {
-//   upload_enabled = "No Minio credentials set";
-// } else {
-//   try {
-//     var minioClient = new Minio.Client({
-//       endPoint: master_node + '.balena-devices.com',
-//       port: 80,
-//       region: 'myregion',
-//       useSSL: false,
-//       accessKey: minio_access_key,
-//       secretKey: minio_secret_key
-//     });
-//   } catch (error) {
-//     upload_enabled = "Minio error";
-//     console.log("Error creating minio client: ", error);
-//   }
-// }
 
 // Enable HTML template middleware
 app.engine('html', require('ejs').renderFile);
@@ -77,114 +43,6 @@ try {
 console.log("Read in", labels.length, "labels:");
 console.log(labels);
 
-// get number of files marked as ready
-// function getReadyCount(uid, callback){
-//   var query = "SELECT filename FROM wav_file WHERE current_status = 'ready'";
-//   db.all(query, function (err, rows) {
-//     if(err){
-//         console.log(err); // stores error detail
-//     }else{
-//         callback(rows.length);
-//     }
-//   });
-// }
-
-// function cb_readyCount(rowcount) {
-//   //console.log("print:",rowcount);
-//   ready_rows = rowcount;
-// }
-
-// MASTER
-// async function doUpload() {
-//   return new Promise( async (resolve, reject) => {
-//     let row_id = 0;
-//     let sql = "";
-//     let frmErr = "NA";
-//     form_errors = "";
-//     let metaData = "";
-//     if (master_node != "unknown") {
-//       sql = "SELECT my_rowid, filename, user_class, user_class_id, user_description FROM wav_file WHERE current_status = 'ready'";
-//       db.all(sql, [], async (err,rows) => {
-//        if (err) {
-//          form_errors = formErrors + ", " + err.message;
-//          console.error(err.message);
-//        }
-//        for (const row of rows) {
-//          await doUploadTasks(row)
-//          //console.log("Completed one doUploadTasks");
-//        }
-//        if (frmErr != "NA") {
-//          frmErr = "<h4 style='color:red;'>One or more errors during file upload: " + form_errors + "</h4>";
-//        } else {
-//          frmErr = "<h4 style='color:green;'>File(s) successfully uploaded.</h4>";
-//        }
-//        resolve(frmErr);
-//       });  // end outer db;
-
-//     } else {
-//       // master node not set
-//       frmErr = "<h4 style='color:red;'>Master node unknown. You must set value in balena dashboard.</h4>";
-//       reject(frmErr);
-//     }
-//   });  // end promise
-// }
-
-// MASTER
-// async function doUploadTasks(row) {
-
-//   var filename = "";
-//   let p = new Promise(async (resolve, reject) => {
-//     let sql = "";
-//     let bucket = "uploads";
-
-//     // upload to master
-//     filename = uuid.substring(0, 7) + "-" + row.user_class_id + "-" + row.filename;
-//     let row_id = row.my_rowid;
-//     let metaData = {
-//       'Content-Type': 'application/octet-stream',
-//       'x-amz-meta-rowid': row_id,
-//       'x-amz-meta-class': row.user_class,
-//       'x-amz-meta-descrip': row.user_description
-//     }
-//     console.log("uploading: ", filename);
-//     try {
-//         url = await minioClient.fPutObject(bucket, filename, wav_path + row.filename, metaData);
-//     } catch(error) {
-//         console.log('minio upload error: ' + error.message);
-//         form_errors = form_errors + ", " + error.message;
-//         resolve(10);
-//     }
-//     //console.log('File ' + filename + ' uploaded successfully.');
-//     resolve(10);
-//   });
-
-//   return p.then((result) => {
-//     console.log(result);
-//     return new Promise((resolve, reject) => {
-//       row_id = row.my_rowid;
-//       sql = "UPDATE wav_file SET timestamp_deleted = datetime('now'), timestamp_uploaded = datetime('now'), current_status = 'uploaded', remote_filename = '" + filename + "' WHERE (my_rowid = " + row_id + ")";
-//       console.log("post upload SQL: ", sql);
-//       db.run(sql, err => {
-//         if (err) {
-//           form_errors = form_errors + ", " + err.message;
-//         }
-//       });
-//       resolve(20);
-//       });
-//   }).then((result) => {
-//     //console.log(result);
-//     return new Promise((resolve, reject) => {
-//       //console.log("deleting file ", row.filename);
-//       fs.unlinkSync(wav_path + row.filename, function (err) {
-//       if (err) {
-//         form_errors = form_errors + ", " + err.message;
-//       }
-//     });
-//     resolve(30);
-//     });
-//   }).then(result => console.log(result));
-
-// }
 
 function getSQL(filter, srtid) {
 
@@ -276,12 +134,8 @@ function buildTableHTML(row) {
     my_table = my_table + "</td><td style='vertical-align: middle;'>"
 
     if (row.current_status != "deleted" || row.current_status == "evaluated") {
-      my_table = my_table + "<a class='w3-button w3-circle w3-small w3-red' onclick=\"modalShow('id01'," + row.my_rowid + ", '" +  row.interpreter_class_id + "', '" + row.filename + "')\"><i class='fa fa-trash'></i></a> &nbsp;&nbsp;"
+      my_table = my_table + "<a class='w3-button w3-circle w3-small w3-red' onclick=\"modalShow('id01'," + row.my_rowid + ", '" + row.filename + "')\"><i class='fa fa-trash'></i></a> &nbsp;&nbsp;"
     }
-
-    // if (row.current_status == "evaluated") {
-    //   my_table = my_table + "<a class='w3-button w3-circle w3-small w3-blue' onclick=\"modalShow('id02'," + row.my_rowid + ", '" +  row.interpreter_class_id + "', '" + row.filename + "')\"><i class='fa fa-cloud-upload'></i></a>"
-    // }
 
     my_table = my_table + "</td></tr>"
 
@@ -289,7 +143,7 @@ function buildTableHTML(row) {
     });
 }
 
-async function buildExport(req) {
+async function buildExport() {
   return new Promise( async resolve => {
     let my_table = "";
     let row_html = "";
@@ -333,13 +187,6 @@ function buildExportJSON(row) {
     my_table = my_table + '"interpreter_class_id": "' + row.interpreter_class_id + '",'
     my_table = my_table + '"interpreter_class2_id": "' + row.interpreter_class2_id + '",'
     my_table = my_table + '"certainty_threshold": "' + row.certainty_threshold  + '"'
-    //my_table = my_table + '"classify_duration": "' + row.classify_duration 
-    // my_table = my_table + '"timestamp_uploaded": "' + row.timestamp_uploaded + '",'
-    // my_table = my_table + '"remote_filename": "' + row.remote_filename + '",'
-    // my_table = my_table + '"user_class": "' + row.user_class + '",'
-    // my_table = my_table + '"user_class_id": "' + row.user_class_id + '",'
-    // my_table = my_table + '"user_description": "' + row.user_description + '",'
-    // my_table = my_table + '"user_notes": "' + row.user_notes + '",'
 
     my_table = my_table + "}"  
 
@@ -347,22 +194,27 @@ function buildExportJSON(row) {
     });
 }
 
+//---------
+// GET is used to request data from a specified resource
+// POST is used to send data to a server to create/update a resource
 
-// --------------
-
-// reply to home page request
+// reply to home page request (response)
 app.get('/', function (req, res) {
   //getReadyCount(0, cb_readyCount);
   //console.log("GETSQL for home page render: ",  getSQL(req.query.filter, req.query.srtid));
+
+  // req.query: request object populated by request query strings found in URL
+  // query strings are in key-value form; start after question mark in URL
   db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
     if (err) {
       return console.error(err.message);
     }
+  // rendering index.ejs page
   res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: 'NA', labels: labels, rm: "false"});
   });
 });
 
-// reply to table request for AJAX calls
+// reply to table request for AJAX calls (response)
 app.get('/table', async function (req, res) {
   let my_table = "";
   //console.log("Get table");
@@ -370,46 +222,24 @@ app.get('/table', async function (req, res) {
   //console.log("my_table: ", my_table);
   //console.log("table moving on...");
   let rr = "      " + table_rows;  // 6 spaces
-  res.send(rr.substring(rr.length - 6, rr.length) + my_table);
+  res.send(rr.substring(rr.length - 6, rr.length) + my_table); // send number of rows + table contents
 });
 
-// reply to export request for JSON export
+// reply to export request for JSON export (response)
 app.get('/export', async function (req, res) {
   let my_table = "";
   my_table = await buildExport(req);
   res.send(my_table);
 });
 
-app.post('/', async (req, res, next) => {
+// post request method requests the server to accept the data enclosed in the body of the request message, most likely for storing it
+// update database and webserver after user deletes data at client side
+app.post('/', async (req, res) => {
   let frmErr = "NA";
-  let filename = "";
   //console.log('Form submitted: ', req.body);
-  let sql = "UPDATE wav_file SET ";
-  // Validate form input
-  // if (req.body.hidFormName == "id01") {
+  let sql = "UPDATE wav_file SET "; // we are going to update record
 
-  //   if (req.body.predictClass == "other" && (req.body.txtDescription === undefined || req.body.txtDescription == "")) {
-  //     frmErr = "<h4 style='color:red;'>Description is required. File not uploaded!</h4>";
-  //   } else {
-  //       // upload details form posted
-  //       // update db here
-  //       const heard = [req.body.predictClass, labels[req.body.predictClass], req.body.txtDescription, req.body.txtNotes, req.body.hidWavID1];
-  //       sql = sql + "user_class_id = ?, user_class = ?, user_description = ?, user_notes = ?, current_status = 'ready', timestamp_ready = datetime('now') WHERE (rowid = ?)";
-  //       //console.log("Upload SQL: ", sql);
-  //       db.run(sql, heard, err => {
-  //         if (err) {
-  //           frmErr = err.message;
-  //         }
-  //       });
-  //       // upload file
-  //       if (frmErr != "NA") {
-  //         frmErr = "<h4 style='color:red;'>Error tagging file for upload: " + frmErr + "</h4>";
-  //       } else {
-  //         frmErr = "<h4 style='color:green;'>File successfully tagged for upload.</h4>";
-  //       }
-  //   }  // end else blank description
-
-  // } 
+  // delete
   if (req.body.hidFormName == "id01") {
     // delete file form posted
     // update db
@@ -420,28 +250,25 @@ app.post('/', async (req, res, next) => {
         frmErr = err.message;
       }
     });
-    // delete file
+    // delete file from filesystem containing all WAV files
     fs.unlinkSync(wav_path + req.body.hidWavFile, function (err) {
     if (err) {
       frmErr = frmErr + " " + err.message;
     }
     });
+    // check if there were any errors deleting file
     if (frmErr != "NA") {
       frmErr = "<h4 style='color:red;'>Error deleting file: " + frmErr + "</h4>";
     } else {
       frmErr = "<h4 style='color:green;'>File successfully deleted.</h4>";
     }
   } 
-  else {
-    // Upload form posted
-    //frmErr = await doUpload()
-    //console.log("moving on...");
-  }
 
   //getReadyCount(0, cb_readyCount);
   //console.log("GETSQL for home page render after POST: ",  getSQL(req.query.filter, req.query.srtid));
   db.all(getSQL(req.query.filter, req.query.srtid), [], (err,rows) => {
-    if (err) {
+    if (err) 
+    {
       return console.error(err.message);
     }
   res.render('index', { model: rows, srtid: req.query.srtid, fil: req.query.filter, frmErr: frmErr, labels: labels, rm: "false"});
