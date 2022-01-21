@@ -87,9 +87,6 @@
                 <td style="vertical-align: middle;"><%= wav.current_status %></td>
                 <td style="vertical-align: middle;"><%= wav.interpreter_class %>&nbsp;
                     <% if (wav.interpreter_certainty) { %>
-                      <% if (wav.interpreter_certainty >= wav.threshold) { %>
-                        <span style="font-weight: bold;">
-                      <% } %> 
                       (<%= wav.interpreter_certainty %>%)
                       <% if (wav.interpreter_certainty >= wav.threshold) { %>
                         </span>
