@@ -1,7 +1,7 @@
 # AI Monitoring at the Edge for Smart Nation Deployment
 A project that aims to identify sources of noise pollution in schools using the Google Coral Development Board.
 
-The Google Coral Development Board (Coral Dev Board) uses an attached microphone to listen for noises above a certain intensity threshold. The noises are saved as WAV files before audio features (e.g Log-Mel Spectrogram) are extracted. A Tensorflow Lite model that runs on the Edge TPU takes in these audio features as input and outputs the predicted sound classes.
+The Google Coral Development Board (Coral Dev Board) uses an attached microphone to listen for noises above a certain intensity threshold. The noises are saved as WAV files before audio features (e.g Log-Mel Spectrogram) are extracted. A Tensorflow Lite model that runs on the Coral Dev Board takes in these audio features as input and outputs the predicted sound classes.
 
 # Models
 
