@@ -1,7 +1,9 @@
-# AI Monitoring at the Edge for Smart Nation Deployment
+# Artificial Intelligence Monitoring at the Edge for Smart Nation Deployment
+
+# About the Project
 A project that aims to identify sources of noise pollution in schools using the Google Coral Development Board.
 
-The Google Coral Development Board (Coral Dev Board) comes with a built-in microphone that can be used to listen for noises above a certain intensity threshold. The noises are saved as WAV files before audio features (e.g Log-Mel Spectrogram) are extracted. A Tensorflow Lite model that runs on the Edge TPU takes in these audio features as input and outputs the predicted sound classes.
+The Google Coral Development Board (Coral Dev Board) uses an attached microphone to listen for noises above a certain intensity threshold. The noises are saved as WAV files before audio features (e.g Log-Mel Spectrogram) are extracted. A Tensorflow Lite model that runs on the Coral Dev Board takes in these audio features as input and outputs the predicted sound classes.
 
 # Models
 
@@ -60,3 +62,7 @@ Helps to customize the behavior of the application:
 
 `DB_PATH` - path and filename of SQLite database (default is `/data/sound_app/sound_app.db`)
 
+# Part 1 of the Project
+
+* This portion shows how we carried out data preprocessing, built and trained the sound classification model as well as quantized and compiled the model for the Edge TPU.
+* Click [here](https://github.com/xychong/edgeaimonitoring) to go to Part 1 of the project.
