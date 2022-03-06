@@ -76,7 +76,7 @@ function refreshTable() {
       // innerHTML : contents within html element
       document.getElementById("tblBody").innerHTML = rt.substring(6, rt.length); // update table content
       document.getElementById("topTitle").innerHTML = "Sound Recordings (" + rt.substring(0, 6).trim() + ")"; // update number of recordings
-      setTimeout(refreshTable, 60000); // refresh every 30s subsequently
+      setTimeout(refreshTable, 30000); // refresh every 30s subsequently
     }
   }
   let querystring = window.location.search;
